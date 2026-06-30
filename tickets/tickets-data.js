@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════════
-   TICKETS-DATA.JS — Catàleg de bitllets / Catálogo de billetes
+   TICKETS-DATA.JS 
    Edita aquest array per afegir, treure o canviar bitllets.
    - link: posa aquí la URL de compra (Atrápalo, TMB, etc.)
            si el deixes buit ('') el botó es desactiva i posa "Pròximament".

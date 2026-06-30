@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════════
-   TICKETS-UI.JS — Pantalla "Bitllets" (feed de targetes amb "Comprar ara")
+   TICKETS-UI.JS  Pantalla "Bitllets" 
    ════════════════════════════════════════════════════════════════ */
 
 const TicketsModule = (() => {

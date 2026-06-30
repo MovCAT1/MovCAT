@@ -1,5 +1,41 @@
 # MovCat — Notes d'aquesta versió
 
+## Ronda 3 — pantalla de bitllets (feed de compra)
+
+- **Pantalla nova "Bitllets"** (`view-tickets`, nova a l'HTML, accessible
+  des del sidebar i del nav inferior, icona de tiquet). Mostra un feed de
+  targetes amb tots els títols de transport de TMB: T-usual, T-casual,
+  bitllet senzill, bitllet aeroport, T-grup, T-4, T-jove, T-16, T-familiar,
+  les variants FM/FN (general/especial), T-usual bonificada, T-dia,
+  T-metropolitana (targeta rosa i pas d'acompanyant), T-escolar, T-verda,
+  bitllet senzill bus, T-Acompanyament, T-aire i Hola Barcelona Travel
+  Card — 27 títols en total, amb nom, descripció, etiquetes i preu en
+  català i castellà.
+- **Mòdul de dades separat** (`tickets/tickets-data.js`): un sol array
+  `TICKETS_DATA` editable a mà, amb un camp `link` per cada bitllet on
+  vas enganxar la URL de compra real de TMB / Hola Barcelona. Si un
+  `link` queda buit, la targeta mostra el botó desactivat amb
+  "Pròximament" en lloc de trencar-se.
+- **Botó "Compra ara"** (`tickets/tickets-ui.js`): obre el `link` del
+  bitllet en una pestanya nova (`window.open`, `noopener`). El mòdul es
+  renderitza sol en entrar a la vista (`onViewActivated` → `case
+  'tickets'`) i és bilingüe (CA/ES) seguint el mateix `I18N` que la resta
+  de l'app.
+- **Imatges sense retallar**: cada targeta admet un camp `image` opcional;
+  si hi és, es mostra sencera (`object-fit: contain`, mai `cover`) sobre
+  un degradat suau que omple l'espai sobrant. Si no hi ha imatge, o la URL
+  falla en carregar, es mostra automàticament una icona de bitllet com a
+  placeholder en lloc d'un buit.
+- **Disseny responsive** (`tickets/tickets.css`): graella de targetes en
+  escriptori; en mòbil (≤640px) passen a files compactes horitzontals
+  (imatge quadrada de 84 px, descripció truncada a 2 línies, màxim 2
+  etiquetes visibles) perquè el feed no ocupi una pantalla sencera per
+  bitllet.
+- **Tot dins una carpeta pròpia** (`/tickets/`): `tickets-data.js`,
+  `tickets-ui.js` i `tickets.css` viuen separats de la resta del codi,
+  així es pot afegir, treure o repreuar bitllets tocant només un fitxer
+  sense risc de trencar la resta de l'app.
+
 ## Ronda 2 — planificador multimodal, mode en ruta, offline i avisos
 
 - **Planificador de rutes multimodal real** (`view-search`, nova a l'HTML —
