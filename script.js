@@ -33,7 +33,11 @@ const LINE_COLORS = {
   S5:  '#00a89d',
   S55: '#00a89d',
   L9:  '#e3007f',
+  L9N: '#e3007f',
+  L9S: '#e3007f',
   L10: '#0082ca',
+  L10N: '#0082ca',
+  L10S: '#0082ca',
   L11: '#93c740',
   /* Metro */
   L1:  '#e3000b',
@@ -202,7 +206,7 @@ const LINES = {
       'Viladecans', 'El Prat de Llobregat',
       'Barcelona Sants', 'Barcelona Passeig de Gràcia',
       'Montcada i Reixac', 'Terrassa Nacions Unides',
-      'Terrassa Rambla', 'Sabadell Rambla', 'Sabadell Nord',
+      'Terrassa-Rambla', 'Sabadell-Rambla', 'Sabadell Nord',
       'Barberà del Vallès', 'Cerdanyola del Vallès',
       'Sant Cugat del Vallès', 'Rubí',
       'Olesa de Montserrat', 'Esparreguera',
@@ -552,6 +556,40 @@ const LINES = {
       'El Maresme | Fòrum', 'La Mina', 'Sant Adrià',
       'Estació de Sant Adrià',
     ],
+  },
+  /* Metro L9N/L10N/L11 — faltaven a LINES tot i estar referenciades
+     a STATIONS (La Sagrera, Verdun, Torre Baró, Ciutat Meridiana,
+     Can Cuiàs), cosa que feia desaparèixer la línia del detall
+     d'estació. S'afegeixen amb les dades reals disponibles. */
+  L9N: {
+    id: 'L9N',
+    label: 'L9N',
+    operator: 'metro',
+    color: LINE_COLORS.L9,
+    textColor: '#fff',
+    description: 'La Sagrera – Gorg',
+    terminus: ['La Sagrera', 'Gorg'],
+    stations: ['La Sagrera'],
+  },
+  L10N: {
+    id: 'L10N',
+    label: 'L10N',
+    operator: 'metro',
+    color: LINE_COLORS.L10,
+    textColor: '#fff',
+    description: 'La Sagrera – Gorg',
+    terminus: ['La Sagrera', 'Gorg'],
+    stations: ['La Sagrera'],
+  },
+  L11: {
+    id: 'L11',
+    label: 'L11',
+    operator: 'metro',
+    color: LINE_COLORS.L11,
+    textColor: '#fff',
+    description: 'Trinitat Nova – Can Cuiàs',
+    terminus: ['Trinitat Nova', 'Can Cuiàs'],
+    stations: ['Verdun', 'Torre Baró | Vallbona', 'Ciudad Meridiana', 'Can Cuiàs'],
   },
 };
 
@@ -3399,16 +3437,6 @@ const STATIONS = {
   'segur-de-calafell': {
     id: 'segur-de-calafell', name: 'Segur de Calafell', shortName: 'Segur Calafell',
     city: 'Calafell', zone: '4', lat: 41.1887, lng: 1.5955,
-    lines: ['R4'], connections: { bus: true }, facilities: { tickets: true },
-  },
-  'terrassa-rambla': {
-    id: 'terrassa-rambla', name: 'Terrassa Rambla', shortName: 'Terrassa Rambla',
-    city: 'Terrassa', zone: '3', lat: 41.5611, lng: 2.0088,
-    lines: ['R4'], connections: { bus: true }, facilities: { accessibility: true, tickets: true },
-  },
-  'sabadell-rambla': {
-    id: 'sabadell-rambla', name: 'Sabadell Rambla', shortName: 'Sabadell Rambla',
-    city: 'Sabadell', zone: '3', lat: 41.5475, lng: 2.1086,
     lines: ['R4'], connections: { bus: true }, facilities: { tickets: true },
   },
   'martorell-enllac': {
