@@ -27,8 +27,8 @@
 
 /* ─── CONFIGURACIÓ API REAL TMB (gratuïta, opcional) ─── */
 const TMB_API = {
-  APP_ID:  '',   // -> developer.tmb.cat (gratuït)
-  APP_KEY: '',
+  APP_ID:  'e726ed87',   // -> developer.tmb.cat (gratuït)
+  APP_KEY: '8947b68ab1cc36b38f9a184dae6353fd',
   BASE:    'https://api.tmb.cat/v1',
   get configured() { return !!(this.APP_ID && this.APP_KEY); },
 };
