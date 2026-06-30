@@ -4692,10 +4692,10 @@ const I18N = (() => {
       nav_map_short: 'Mapa',
       nav_route: 'Planificar ruta',
       nav_route_short: 'Ruta',
-      nav_tickets: 'Bitllets',
-      nav_tickets_short: 'Bitllets',
-      tickets_title: 'Bitllets',
-      tickets_subtitle: "Tria el bitllet que necessites i compra'l online",
+      nav_tickets: 'TMB',
+      nav_tickets_short: 'TMB',
+      tickets_title: 'TMB',
+      tickets_subtitle: 'Notícies, avisos, estat del servei i bitllets',
       route_title: 'Planifica una ruta',
       route_subtitle: 'Tren, metro, FGC, tramvia i bus combinats',
       origin: 'Origen',
@@ -4760,10 +4760,10 @@ const I18N = (() => {
       nav_map_short: 'Mapa',
       nav_route: 'Planificar ruta',
       nav_route_short: 'Ruta',
-      nav_tickets: 'Billetes',
-      nav_tickets_short: 'Billetes',
-      tickets_title: 'Billetes',
-      tickets_subtitle: 'Elige el billete que necesites y cómpralo online',
+      nav_tickets: 'TMB',
+      nav_tickets_short: 'TMB',
+      tickets_title: 'TMB',
+      tickets_subtitle: 'Noticias, avisos, estado del servicio y billetes',
       route_title: 'Planifica una ruta',
       route_subtitle: 'Tren, metro, FGC, tranvía y bus combinados',
       origin: 'Origen',
@@ -4912,6 +4912,10 @@ const UIModule = (() => {
   function navigateTo(viewId) {
     if (!document.getElementById(`view-${viewId}`)) return;
 
+    if (currentView === 'tickets' && viewId !== 'tickets' && window.TmbHubModule) {
+      TmbHubModule.onViewLeft();
+    }
+
     document.querySelectorAll('.view').forEach(v => v.classList.remove('view--active'));
     document.querySelectorAll('.nav-item[data-view]').forEach(n => {
       n.classList.remove('nav-item--active');
@@ -4940,7 +4944,7 @@ const UIModule = (() => {
       case 'alerts':    renderAlertsView();    break;
       case 'map':       renderMapView();       break;
       case 'search':    renderSearchView();    break;
-      case 'tickets':   if (window.TicketsModule) TicketsModule.render(); break;
+      case 'tickets':   if (window.TmbHubModule) TmbHubModule.render(); break;
       case 'trip':      TripModule.render();   break;
     }
   }

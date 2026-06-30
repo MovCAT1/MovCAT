@@ -2,7 +2,7 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- PWA / App Meta -->
   <meta name="theme-color" content="#0d0d0f" />
@@ -29,7 +29,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="tickets/tickets.css" />
+  <link rel="stylesheet" href="tmb/tickets.css" />
+  <link rel="stylesheet" href="tmb/tmb-hub.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <title>MovCat</title>
 </head>
@@ -272,15 +273,15 @@
         <div class="route-results-zone" id="routeResultContainer"></div>
       </section>
 
-      <!-- ── VISTA: BITLLETS ── -->
-      <section class="view" id="view-tickets" aria-label="Bitllets">
+      <!-- ── VISTA: TMB (notícies, avisos, estat, bitllets) ── -->
+      <section class="view" id="view-tickets" aria-label="TMB">
         <div class="view-header">
           <div>
-            <h1 class="view-title" data-i18n="tickets_title">Bitllets</h1>
-            <p class="view-subtitle" data-i18n="tickets_subtitle">Tria el bitllet que necessites i compra'l online</p>
+            <h1 class="view-title" data-i18n="tickets_title">TMB</h1>
+            <p class="view-subtitle" data-i18n="tickets_subtitle">Notícies, avisos, estat del servei i bitllets</p>
           </div>
         </div>
-        <div class="tickets-feed" id="ticketsFeedContainer"></div>
+        <div class="tmb-hub" id="tmbHubContainer"></div>
       </section>
 
       <!-- ── VISTA: MODE EN RUTA (seguiment en directe) ── -->
@@ -366,11 +367,12 @@
 <!-- Scripts -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="bus-data.js"></script>
-<script src="tickets/tickets-data.js"></script>
+<script src="tmb/tickets-data.js"></script>
 <script src="script.js"></script>
 <script src="geo-map.js"></script>
 <script src="bus-ui.js"></script>
-<script src="tickets/tickets-ui.js"></script>
+<script src="tmb/tickets-ui.js"></script>
+<script src="tmb/tmb-hub.js"></script>
 <script src="trip-mode.js"></script>
 <script src="notify.js"></script>
 
