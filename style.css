@@ -1834,3 +1834,61 @@ ul,ol   { list-style: none; }
   background: var(--bg-input); border-radius: var(--r-pill);
   font-size: .82rem; font-weight: 700; color: var(--text-1);
 }
+
+/* ─── Tram a peu dins el resultat de ruta ─── */
+.route-segment--walk { align-items: center; padding: 10px 14px; gap: 10px; background: var(--bg-input); }
+.seg-walk-icon { font-size: 1.1rem; flex-shrink: 0; }
+.seg-walk-text { font-size: .8rem; color: var(--text-2); font-weight: 500; }
+
+.route-trip-start-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: calc(100% - 28px); margin: 0 14px 14px;
+  height: 44px; background: var(--text-1); color: var(--bg);
+  border-radius: var(--r-md); font-size: .85rem; font-weight: 600;
+  transition: opacity .15s;
+}
+.route-trip-start-btn:hover { opacity: .88; }
+
+/* ─── Mode en ruta ─── */
+.trip-header { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 14px; }
+.trip-header-route { font-size: 1rem; font-weight: 700; color: var(--text-1); }
+.trip-header-step { font-size: .76rem; color: var(--text-3); font-family: 'JetBrains Mono', monospace; }
+
+.trip-current-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-xl);
+  padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow-sm);
+}
+.trip-current-line, .trip-current-walk { display: flex; align-items: center; gap: 14px; }
+.trip-current-badge {
+  font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: .9rem;
+  color: #fff; padding: 8px 12px; border-radius: var(--r-md); flex-shrink: 0;
+}
+.trip-current-icon { font-size: 1.6rem; flex-shrink: 0; }
+.trip-current-title { font-size: .92rem; font-weight: 600; color: var(--text-1); }
+.trip-current-sub { font-size: .82rem; color: var(--text-2); margin-top: 2px; }
+.trip-current-sub strong { font-family: 'JetBrains Mono', monospace; color: var(--text-1); }
+
+.trip-steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 18px; }
+.trip-step { display: flex; align-items: center; gap: 12px; padding: 9px 6px; opacity: .45; }
+.trip-step--active { opacity: 1; }
+.trip-step--done { opacity: .3; text-decoration: line-through; }
+.trip-step-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.trip-step-label { font-size: .82rem; color: var(--text-1); }
+
+.trip-actions { display: flex; gap: 8px; margin-bottom: 10px; }
+.trip-stop-btn {
+  width: 100%; height: 40px; border-radius: var(--r-md);
+  background: transparent; color: var(--err); font-size: .82rem; font-weight: 500;
+  border: 1px solid var(--err-bg);
+}
+.trip-stop-btn:hover { background: var(--err-bg); }
+
+/* ─── Botó de notificacions (línies favorites) ─── */
+.sidebar-notify-btn {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-3); border: 1px solid var(--border);
+  margin-right: 6px; transition: all .15s;
+}
+.sidebar-notify-btn:hover { border-color: var(--border-2); color: var(--text-1); }
+.sidebar-notify-btn.is-active { color: var(--accent); border-color: var(--accent); background: var(--accent-2); }

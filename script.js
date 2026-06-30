@@ -3887,61 +3887,108 @@ const RoutesModule = (() => {
   function buildGraph() {
     if (graph) return graph;
     const { STATIONS, LINES } = window.MOVCAT_DATA;
+    const { BUS_STOPS, BUS_LINES } = window.MOVCAT_BUS || { BUS_STOPS: {}, BUS_LINES: {} };
     graph = {}; // nodeKey -> [ { nodeKey, cost, type } ]
 
     const nodeKey = (stationId, lineId) => `${stationId}::${lineId}`;
 
-    /* Primero, creamos adyacencias por línea */
-    Object.values(LINES).forEach(line => {
-      const stations = line.stations || [];
-      for (let i = 0; i < stations.length; i++) {
-        const stName = stations[i];
-        // Buscar estación por nombre (nombre exacto o shortName)
-        const stObj = findStationByName(stName);
-        if (!stObj) continue;
-        const stId = stObj.id;
-        const key = nodeKey(stId, line.id);
-        if (!graph[key]) graph[key] = [];
+    function addLineAdjacency(linesObj) {
+      Object.values(linesObj).forEach(line => {
+        const stations = line.stations || [];
+        for (let i = 0; i < stations.length; i++) {
+          const stObj = findStationByName(stations[i]);
+          if (!stObj) continue;
+          const stId = stObj.id;
+          const key = nodeKey(stId, line.id);
+          if (!graph[key]) graph[key] = [];
 
-        // Adyacente siguiente
-        if (i < stations.length - 1) {
-          const nextName = stations[i + 1];
-          const nextObj = findStationByName(nextName);
-          if (nextObj) {
-            const nextKey = nodeKey(nextObj.id, line.id);
-            graph[key].push({ key: nextKey, cost: 1, type: 'travel', lineId: line.id, stationId: nextObj.id });
-            if (!graph[nextKey]) graph[nextKey] = [];
-            graph[nextKey].push({ key, cost: 1, type: 'travel', lineId: line.id, stationId: stObj.id });
+          if (i < stations.length - 1) {
+            const nextObj = findStationByName(stations[i + 1]);
+            if (nextObj) {
+              const nextKey = nodeKey(nextObj.id, line.id);
+              graph[key].push({ key: nextKey, cost: 1, type: 'travel', lineId: line.id, stationId: nextObj.id });
+              if (!graph[nextKey]) graph[nextKey] = [];
+              graph[nextKey].push({ key, cost: 1, type: 'travel', lineId: line.id, stationId: stObj.id });
+            }
           }
         }
-      }
-    });
+      });
+    }
+    addLineAdjacency(LINES);
+    addLineAdjacency(BUS_LINES);
 
-    /* Transbordos: misma estación, distinta línea */
-    Object.values(STATIONS).forEach(station => {
-      const lines = station.lines || [];
-      for (let i = 0; i < lines.length; i++) {
-        for (let j = 0; j < lines.length; j++) {
-          if (i === j) continue;
-          const fromKey = nodeKey(station.id, lines[i]);
-          const toKey   = nodeKey(station.id, lines[j]);
-          if (!graph[fromKey]) graph[fromKey] = [];
-          graph[fromKey].push({ key: toKey, cost: 3, type: 'transfer', lineId: lines[j], stationId: station.id });
+    /* Transbordos: misma parada, distinta línea (tren o bus) */
+    function addTransfers(stopsObj) {
+      Object.values(stopsObj).forEach(station => {
+        const lines = station.lines || [];
+        for (let i = 0; i < lines.length; i++) {
+          for (let j = 0; j < lines.length; j++) {
+            if (i === j) continue;
+            const fromKey = nodeKey(station.id, lines[i]);
+            const toKey   = nodeKey(station.id, lines[j]);
+            if (!graph[fromKey]) graph[fromKey] = [];
+            graph[fromKey].push({ key: toKey, cost: 3, type: 'transfer', lineId: lines[j], stationId: station.id });
+          }
+        }
+      });
+    }
+    addTransfers(STATIONS);
+    addTransfers(BUS_STOPS);
+
+    /* Transbordos a peu entre parades properes (<= 400 m), tren <-> bus
+       inclòs — això és el que fa que el planificador sigui multimodal. */
+    if (window.GeoModule) {
+      const allStops = [...Object.values(STATIONS), ...Object.values(BUS_STOPS)]
+        .filter(s => typeof s.lat === 'number' && typeof s.lng === 'number');
+      for (let a = 0; a < allStops.length; a++) {
+        for (let b = a + 1; b < allStops.length; b++) {
+          const s1 = allStops[a], s2 = allStops[b];
+          const d = GeoModule.haversine(s1.lat, s1.lng, s2.lat, s2.lng);
+          if (d <= 0 || d > 400) continue;
+          const walkMin = GeoModule.walkMinutes(d);
+          (s1.lines || []).forEach(l1 => {
+            (s2.lines || []).forEach(l2 => {
+              const k1 = nodeKey(s1.id, l1);
+              const k2 = nodeKey(s2.id, l2);
+              if (!graph[k1]) graph[k1] = [];
+              graph[k1].push({ key: k2, cost: Math.max(1, walkMin / 2), type: 'walk', lineId: l2, stationId: s2.id, walkMin });
+              if (!graph[k2]) graph[k2] = [];
+              graph[k2].push({ key: k1, cost: Math.max(1, walkMin / 2), type: 'walk', lineId: l1, stationId: s1.id, walkMin });
+            });
+          });
         }
       }
-    });
+    }
 
     return graph;
   }
 
-  /* Cache nombre → id */
+  function getStop(stopId) {
+    const { STATIONS } = window.MOVCAT_DATA;
+    const { BUS_STOPS } = window.MOVCAT_BUS || { BUS_STOPS: {} };
+    return STATIONS[stopId] || BUS_STOPS[stopId] || null;
+  }
+
+  function getLine(lineId) {
+    const { LINES } = window.MOVCAT_DATA;
+    const { BUS_LINES } = window.MOVCAT_BUS || { BUS_LINES: {} };
+    return LINES[lineId] || BUS_LINES[lineId] || null;
+  }
+
+  function getLineColor(lineId) {
+    const line = getLine(lineId);
+    if (line && line.color) return line.color;
+    return window.MOVCAT_DATA.LINE_COLORS[lineId] || '#888';
+  }
+
+  /* Cache nombre → parada (tren o bus) */
   const stationNameCache = {};
   function findStationByName(name) {
     if (stationNameCache[name]) return stationNameCache[name];
     const { STATIONS } = window.MOVCAT_DATA;
-    const st = Object.values(STATIONS).find(
-      s => s.name === name || s.shortName === name
-    );
+    const { BUS_STOPS } = window.MOVCAT_BUS || { BUS_STOPS: {} };
+    let st = Object.values(STATIONS).find(s => s.name === name || s.shortName === name);
+    if (!st) st = Object.values(BUS_STOPS).find(s => s.name === name || s.shortName === name);
     if (st) stationNameCache[name] = st;
     return st || null;
   }
@@ -3951,10 +3998,9 @@ const RoutesModule = (() => {
   ══════════════════════════════════════ */
   function dijkstra(originId, destinationId) {
     const g = buildGraph();
-    const { STATIONS } = window.MOVCAT_DATA;
 
-    const originStation = STATIONS[originId];
-    const destStation   = STATIONS[destinationId];
+    const originStation = getStop(originId);
+    const destStation   = getStop(destinationId);
     if (!originStation || !destStation) return null;
     if (originId === destinationId) return { segments: [], totalTime: 0, transfers: 0 };
 
@@ -3988,7 +4034,7 @@ const RoutesModule = (() => {
     }
 
     /* Encontrar el nodo destino con menor coste */
-    const destStation2 = STATIONS[destinationId];
+    const destStation2 = getStop(destinationId);
     let bestDestKey = null;
     let bestCost = INF;
     (destStation2.lines || []).forEach(lineId => {
@@ -4013,24 +4059,37 @@ const RoutesModule = (() => {
   }
 
   function buildRouteResult(path, prev, totalCost) {
-    const { STATIONS, LINES, LINE_COLORS } = window.MOVCAT_DATA;
     if (!path.length) return null;
 
     const segments  = [];
     let currentLine = null;
     let segStations = [];
     let transfers   = 0;
+    let walkMinutesTotal = 0;
 
     path.forEach((nodeKey, i) => {
       const [stId, lineId] = nodeKey.split('::');
       const edge = prev[nodeKey];
       const type = edge ? edge.type : 'start';
 
-      if (type === 'transfer') {
+      if (type === 'walk') {
         if (segStations.length) {
           segments.push(buildSegment(currentLine, segStations));
         }
-        const st = STATIONS[stId];
+        const fromStop = getStop(edge.from.split('::')[0]);
+        segments.push({
+          walk: true,
+          minutes: edge.walkMin || 1,
+          fromName: fromStop ? (fromStop.shortName || fromStop.name) : '',
+          toName: getStop(stId) ? (getStop(stId).shortName || getStop(stId).name) : '',
+        });
+        walkMinutesTotal += edge.walkMin || 1;
+        segStations = [stId];
+        currentLine = lineId;
+      } else if (type === 'transfer') {
+        if (segStations.length) {
+          segments.push(buildSegment(currentLine, segStations));
+        }
         segStations = [stId];
         currentLine = lineId;
         transfers++;
@@ -4050,29 +4109,30 @@ const RoutesModule = (() => {
       segments.push(buildSegment(currentLine, segStations));
     }
 
-    /* Tiempo estimado (15 min/segmento + 5 min/transbordo) */
-    const stationsCount = segments.reduce((s, seg) => s + seg.stations.length, 0);
-    const totalMinutes  = Math.round(stationsCount * 2.5 + transfers * 5);
+    /* Tiempo estimado (2.5 min/parada + 5 min/transbordo + caminar real) */
+    const stationsCount = segments.reduce((s, seg) => s + (seg.walk ? 0 : seg.stations.length), 0);
+    const totalMinutes  = Math.round(stationsCount * 2.5 + transfers * 5 + walkMinutesTotal);
 
     return {
-      segments: segments.filter(s => s.stations.length > 1),
+      segments: segments.filter(s => s.walk || s.stations.length > 1),
       totalTime: totalMinutes,
-      transfers: Math.max(0, transfers - 1),
+      transfers: Math.max(0, transfers - (transfers > 0 ? 1 : 0)),
+      walkMinutes: walkMinutesTotal,
       totalCost,
     };
   }
 
   function buildSegment(lineId, stationIds) {
-    const { STATIONS, LINES, LINE_COLORS } = window.MOVCAT_DATA;
-    const line = LINES[lineId];
+    const line = getLine(lineId);
     const stations = stationIds
-      .map(id => STATIONS[id])
+      .map(id => getStop(id))
       .filter(Boolean);
     return {
       lineId,
       lineLabel: line ? line.label : lineId,
-      lineColor: LINE_COLORS[lineId] || '#888',
+      lineColor: getLineColor(lineId),
       operator:  line ? line.operator : 'renfe',
+      isBus: !!(line && line.operator === 'tmb_bus'),
       stations,
     };
   }
@@ -4164,6 +4224,9 @@ const RoutesModule = (() => {
     getHistory,
     buildGraph,
     findStationByName,
+    getStop,
+    getLine,
+    getLineColor,
   };
 })();
 
@@ -4629,6 +4692,15 @@ const I18N = (() => {
       nav_alerts_short: 'Alertes',
       nav_map: 'Mapa de xarxa',
       nav_map_short: 'Mapa',
+      nav_route: 'Planificar ruta',
+      nav_route_short: 'Ruta',
+      route_title: 'Planifica una ruta',
+      route_subtitle: 'Tren, metro, FGC, tramvia i bus combinats',
+      origin: 'Origen',
+      destination: 'Destí',
+      calculate_route: 'Calcula la ruta',
+      trip_title: 'Mode en ruta',
+      trip_subtitle: 'Seguiment en directe del teu trajecte',
       greeting_morning: 'Bon dia',
       greeting_afternoon: 'Bona tarda',
       greeting_night: 'Bona nit',
@@ -4684,6 +4756,15 @@ const I18N = (() => {
       nav_alerts_short: 'Alertas',
       nav_map: 'Mapa de red',
       nav_map_short: 'Mapa',
+      nav_route: 'Planificar ruta',
+      nav_route_short: 'Ruta',
+      route_title: 'Planifica una ruta',
+      route_subtitle: 'Tren, metro, FGC, tranvía y bus combinados',
+      origin: 'Origen',
+      destination: 'Destino',
+      calculate_route: 'Calcular ruta',
+      trip_title: 'Modo en ruta',
+      trip_subtitle: 'Seguimiento en directo de tu trayecto',
       greeting_morning: 'Buenos días',
       greeting_afternoon: 'Buenas tardes',
       greeting_night: 'Buenas noches',
@@ -4817,6 +4898,7 @@ const UIModule = (() => {
   let searchTimeout     = null;
   let routeOrigin       = null;
   let routeDestination  = null;
+  let lastRouteResult   = null;
   let activeSearchField = null;
   let currentLinesFilter = 'all';
 
@@ -4851,6 +4933,8 @@ const UIModule = (() => {
       case 'lines':     renderLinesView();     break;
       case 'alerts':    renderAlertsView();    break;
       case 'map':       renderMapView();       break;
+      case 'search':    renderSearchView();    break;
+      case 'trip':      TripModule.render();   break;
     }
   }
 
@@ -4975,7 +5059,7 @@ const UIModule = (() => {
       return;
     }
     searchTimeout = setTimeout(() => {
-      const results = (activeSearchField === 'general' && window.SearchAllModule)
+      const results = window.SearchAllModule
         ? SearchAllModule.searchAll(q, 14)
         : StationsModule.searchStations(q, 12).map(s => ({ ...s, kind: 'train' }));
       _renderSearchResults(results, q);
@@ -5028,6 +5112,21 @@ const UIModule = (() => {
         const stId = item.dataset.station;
         const isBus = item.dataset.kind === 'bus';
 
+        if (activeSearchField === 'origin') {
+          routeOrigin = stId;
+          _updateRouteDisplay();
+          closeSearchOverlay();
+          _checkAndCalculateRoute();
+          return;
+        }
+        if (activeSearchField === 'destination') {
+          routeDestination = stId;
+          _updateRouteDisplay();
+          closeSearchOverlay();
+          _checkAndCalculateRoute();
+          return;
+        }
+
         if (isBus) {
           closeSearchOverlay();
           if (window.BusModule) BusModule.renderBusStopDetail(stId);
@@ -5037,20 +5136,13 @@ const UIModule = (() => {
         const st = window.MOVCAT_DATA.STATIONS[stId];
         if (!st) return;
 
-        if (activeSearchField === 'origin') {
-          routeOrigin = stId;
-          _updateRouteDisplay();
-        } else if (activeSearchField === 'destination') {
-          routeDestination = stId;
-          _updateRouteDisplay();
-        } else if (activeSearchField === 'general') {
+        if (activeSearchField === 'general') {
           closeSearchOverlay();
           StationsModule.renderStationDetail(stId);
           return;
         }
 
         closeSearchOverlay();
-        _checkAndCalculateRoute();
       });
     });
   }
@@ -5205,7 +5297,6 @@ const UIModule = (() => {
     if (!container || !section) return;
 
     const history = RoutesModule.getHistory();
-    const { STATIONS } = window.MOVCAT_DATA;
 
     if (!history.length) {
       section.style.display = 'none';
@@ -5214,8 +5305,8 @@ const UIModule = (() => {
 
     section.style.display = 'block';
     container.innerHTML = history.slice(0, 4).map(h => {
-      const o = STATIONS[h.originId];
-      const d = STATIONS[h.destinationId];
+      const o = RoutesModule.getStop(h.originId);
+      const d = RoutesModule.getStop(h.destinationId);
       if (!o || !d) return '';
       return `
         <button class="recent-route-item" data-origin="${h.originId}" data-dest="${h.destinationId}" type="button">
@@ -5257,7 +5348,6 @@ const UIModule = (() => {
   }
 
   function _updateRouteDisplay() {
-    const { STATIONS } = window.MOVCAT_DATA;
     const originEl = document.getElementById('routeOriginDisplay');
     const destEl   = document.getElementById('routeDestDisplay');
     const calcBtn  = document.getElementById('calculateRouteBtn');
@@ -5265,13 +5355,13 @@ const UIModule = (() => {
     const clearD   = document.getElementById('clearDestBtn');
 
     if (originEl) {
-      const name = routeOrigin ? STATIONS[routeOrigin]?.name : null;
-      originEl.textContent = name || 'Seleccionar origen';
+      const name = routeOrigin ? RoutesModule.getStop(routeOrigin)?.name : null;
+      originEl.textContent = name || (I18N.getLang() === 'es' ? 'Seleccionar origen' : 'Seleccionar origen');
       originEl.classList.toggle('is-placeholder', !name);
     }
     if (destEl) {
-      const name = routeDestination ? STATIONS[routeDestination]?.name : null;
-      destEl.textContent = name || 'Seleccionar destí';
+      const name = routeDestination ? RoutesModule.getStop(routeDestination)?.name : null;
+      destEl.textContent = name || (I18N.getLang() === 'es' ? 'Seleccionar destino' : 'Seleccionar destí');
       destEl.classList.toggle('is-placeholder', !name);
     }
     if (calcBtn) calcBtn.disabled = !(routeOrigin && routeDestination);
@@ -5343,9 +5433,9 @@ const UIModule = (() => {
   }
 
   function renderRouteResult(result, container) {
-    const { STATIONS } = window.MOVCAT_DATA;
-    const originSt  = STATIONS[routeOrigin];
-    const destSt    = STATIONS[routeDestination];
+    const originSt  = RoutesModule.getStop(routeOrigin);
+    const destSt    = RoutesModule.getStop(routeDestination);
+    lastRouteResult = { result, originId: routeOrigin, destId: routeDestination };
 
     const transferText = result.transfers === 0
       ? 'Sense transbordaments'
@@ -5353,7 +5443,7 @@ const UIModule = (() => {
         ? '1 transbordament'
         : `${result.transfers} transbordaments`;
 
-    const totalStations = result.segments.reduce((s, seg) => s + seg.stations.length, 0);
+    const totalStations = result.segments.reduce((s, seg) => s + (seg.walk ? 0 : seg.stations.length), 0);
 
     container.innerHTML = `
       <div class="route-result">
@@ -5374,13 +5464,29 @@ const UIModule = (() => {
           </div>
         </div>
         <div class="route-segments">
-          ${result.segments.map((seg, i) => `
+          ${result.segments.map((seg, i) => {
+            if (seg.walk) {
+              return `
+                <div class="route-segment route-segment--walk">
+                  <div class="seg-walk-icon">🚶</div>
+                  <div class="seg-content">
+                    <span class="seg-walk-text">${seg.fromName} → ${seg.toName} · ${seg.minutes} min a peu</span>
+                  </div>
+                </div>
+              `;
+            }
+            const opLabel = seg.operator === 'renfe' ? 'Rodalies'
+              : seg.operator === 'fgc' ? 'FGC'
+              : seg.operator === 'tmb_bus' ? 'Bus TMB'
+              : seg.operator === 'metro' ? 'Metro'
+              : seg.operator;
+            return `
             <div class="route-segment">
               <div class="seg-line-indicator" style="background:${seg.lineColor}"></div>
               <div class="seg-content">
                 <div class="seg-header">
-                  <span class="seg-badge" style="background:${seg.lineColor}">${seg.lineLabel}</span>
-                  <span class="seg-op">${seg.operator === 'renfe' ? 'Rodalies' : seg.operator === 'fgc' ? 'FGC' : seg.operator}</span>
+                  <span class="seg-badge" style="background:${seg.lineColor}">${seg.isBus ? '🚌 ' : ''}${seg.lineLabel}</span>
+                  <span class="seg-op">${opLabel}</span>
                   <span class="seg-stops">${seg.stations.length - 1} parades</span>
                 </div>
                 <div class="seg-stations">
@@ -5406,10 +5512,19 @@ const UIModule = (() => {
                   </div>` : ''}
               </div>
             </div>
-          `).join('')}
+          `;
+          }).join('')}
         </div>
+        <button class="route-trip-start-btn" id="startTripBtn" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>${I18N.getLang() === 'es' ? 'Iniciar seguimiento en directo' : 'Inicia seguiment en directe'}</span>
+        </button>
       </div>
     `;
+    document.getElementById('startTripBtn')?.addEventListener('click', () => {
+      if (window.TripModule) TripModule.start(lastRouteResult);
+      navigateTo('trip');
+    });
   }
 
   /* ══════════════════ VISTA LÍNIES ══════════════════ */
@@ -5612,6 +5727,15 @@ const UIModule = (() => {
     // Header search
     document.getElementById('headerSearchBtn')?.addEventListener('click', () => openSearchOverlay('general'));
     document.getElementById('homeSearchCta')?.addEventListener('click', () => openSearchOverlay('general'));
+
+    // Route planner ("Ruta")
+    document.getElementById('routeOriginDisplay')?.addEventListener('click', () => openSearchOverlay('origin'));
+    document.getElementById('routeDestDisplay')?.addEventListener('click', () => openSearchOverlay('destination'));
+    document.getElementById('clearOriginBtn')?.addEventListener('click', e => { e.stopPropagation(); routeOrigin = null; _updateRouteDisplay(); });
+    document.getElementById('clearDestBtn')?.addEventListener('click', e => { e.stopPropagation(); routeDestination = null; _updateRouteDisplay(); });
+    document.getElementById('routeSwapBtn')?.addEventListener('click', _swapRouteStations);
+    document.getElementById('routeClearAllBtn')?.addEventListener('click', _clearRoute);
+    document.getElementById('calculateRouteBtn')?.addEventListener('click', calculateAndShowRoute);
 
     // Search overlay events
     const searchInput = document.getElementById('searchInput');

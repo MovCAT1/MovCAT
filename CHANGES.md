@@ -1,5 +1,35 @@
 # MovCat — Notes d'aquesta versió
 
+## Ronda 2 — planificador multimodal, mode en ruta, offline i avisos
+
+- **Planificador de rutes multimodal real** (`view-search`, nova a l'HTML —
+  abans el codi existia a `script.js` però no tenia cap pantalla). Combina
+  tren + metro + FGC + tramvia + **bus**, amb trams a peu reals (Haversine,
+  ≤400 m) calculats per connectar qualsevol parada de tren amb qualsevol
+  parada de bus propera. Accessible des de "Ruta" al menú/nav inferior.
+- **Mode en ruta** (`trip-mode.js`, vista nova `view-trip`): un cop calculada
+  una ruta, "Inicia seguiment en directe" obre una pantalla amb el tram
+  actual destacat, compte enrere fins al pròxim tren/bus (real si hi ha
+  iBus configurat, estimat si no) i avenç manual entre trams.
+- **API real de TMB (iBus) connectada**: s'han desat el teu App ID i App
+  Key a `bus-data.js` (`TMB_API`). Per tenir temps real de veritat a cada
+  parada de bus encara cal el `tmbStopCode` oficial de cada parada (el
+  número que hi ha al pal de la parada, o ve dins el GTFS); mentre no hi
+  sigui, es mostra l'estimació per freqüència, etiquetada com a tal.
+- **Service Worker (`sw.js`)**: l'app shell (HTML/CSS/JS/icona) es queda en
+  cache i funciona sense cobertura; les dades en directe sempre intenten
+  anar a la xarxa primer.
+- **Avisos de línies favorites (`notify.js`)**: botó de campaneta a la
+  barra lateral; un cop concedit el permís, si una línia d'una estació
+  marcada com a favorita passa a retard/servei parcial, rep una
+  notificació local del navegador. **Nota honesta**: és una notificació
+  local (Notification API), activa mentre el navegador estigui obert —
+  no és push real amb l'app tancada de tot, perquè això requereix un
+  servidor push (web-push amb VAPID) que MovCat no té perquè no compta
+  amb backend propi.
+
+## Ronda 1
+
 ## Què s'ha afegit / canviat
 
 **Bus**
