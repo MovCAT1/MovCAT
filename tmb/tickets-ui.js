@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════════
-   TICKETS-UI.JS  Pantalla "Bitllets" 
+   TICKETS-UI.JS Pantalla "Bitllets" 
    ════════════════════════════════════════════════════════════════ */
 
 const TicketsModule = (() => {

@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════════
-   TMB-HUB.JS   Pantalla "TMB" (abans "Bitllets")
+   TMB-HUB.JS  Pantalla "TMB" (abans "Bitllets")
    Accessos directes, avisos (carrusel autoplay), estat del servei,
    notícies, i un overlay a pantalla completa amb els bitllets.
    ════════════════════════════════════════════════════════════════ */
