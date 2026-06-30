@@ -1,0 +1,218 @@
+/* ════════════════════════════════════════════════════════════════
+   TICKETS.CSS — Pantalla "Bitllets"
+   ════════════════════════════════════════════════════════════════ */
+
+.tickets-feed {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+  padding-bottom: 24px;
+}
+
+.ticket-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+
+.ticket-card:hover {
+  border-color: var(--border-2);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+/* ── Imatge: mai es talla. Es veu sencera, centrada, amb fons suau
+   que omple l'espai sobrant. Si no hi ha imatge, mostra una
+   icona de bitllet com a placeholder en lloc de deixar buit. ── */
+.ticket-card-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, var(--bg-input), var(--border));
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ticket-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.ticket-card-img--placeholder svg {
+  width: 34%;
+  height: 34%;
+  color: var(--text-3);
+  opacity: .55;
+}
+
+.ticket-card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.ticket-card-title {
+  font-size: .98rem;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.2;
+}
+
+.ticket-card-desc {
+  font-size: .8rem;
+  color: var(--text-2);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.ticket-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.ticket-tag {
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--text-2);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  padding: 3px 9px;
+}
+
+.ticket-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.ticket-card-price {
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.ticket-buy-btn {
+  background: var(--accent);
+  color: var(--text-on-acc);
+  border: none;
+  border-radius: var(--r-pill);
+  padding: 8px 16px;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s, transform .1s;
+}
+
+.ticket-buy-btn:hover { background: var(--accent-hov); }
+.ticket-buy-btn:active { transform: scale(.97); }
+
+.ticket-buy-btn--disabled,
+.ticket-buy-btn[disabled] {
+  background: var(--bg-input);
+  color: var(--text-3);
+  cursor: not-allowed;
+}
+
+.tickets-empty {
+  text-align: center;
+  color: var(--text-3);
+  font-size: .85rem;
+  padding: 40px 0;
+}
+
+/* ── Mòbil: targetes compactes en horitzontal (imatge + text al costat) ── */
+@media (max-width: 640px) {
+  .tickets-feed {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .ticket-card {
+    flex-direction: row;
+    border-radius: var(--r-md);
+  }
+
+  .ticket-card-img {
+    width: 84px;
+    min-width: 84px;
+    aspect-ratio: 1 / 1;
+  }
+
+  .ticket-card-img--placeholder svg {
+    width: 42%;
+    height: 42%;
+  }
+
+  .ticket-card-body {
+    padding: 9px 10px;
+    gap: 4px;
+    min-width: 0; /* permet truncar text dins flex */
+  }
+
+  .ticket-card-title {
+    font-size: .82rem;
+    line-height: 1.15;
+  }
+
+  .ticket-card-desc {
+    font-size: .68rem;
+    line-height: 1.3;
+    /* trunca a 2 línies perquè la targeta no s'estiri */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .ticket-card-tags {
+    gap: 4px;
+  }
+
+  .ticket-tag {
+    font-size: .58rem;
+    padding: 2px 6px;
+  }
+
+  /* mostra com a màxim 2 tags en mòbil per no ocupar línies extra */
+  .ticket-tag:nth-child(n+3) {
+    display: none;
+  }
+
+  .ticket-card-footer {
+    margin-top: 2px;
+    padding-top: 6px;
+    gap: 6px;
+  }
+
+  .ticket-card-price {
+    font-size: .76rem;
+  }
+
+  .ticket-buy-btn {
+    padding: 6px 11px;
+    font-size: .7rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .ticket-card-img { width: 68px; min-width: 68px; }
+}
