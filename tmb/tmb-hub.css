@@ -349,6 +349,86 @@
   flex: 1;
 }
 
+/* ── "Et pot interessar" (carrusel arrossegable amb peek) ── */
+.tmb-interest-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+  margin: 0 -16px;
+  padding: 0 16px 4px;
+}
+.tmb-interest-scroll::-webkit-scrollbar { display: none; }
+.tmb-interest-scroll--dragging {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+  cursor: grabbing;
+}
+
+.tmb-interest-card {
+  flex: 0 0 78%;
+  max-width: 320px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  text-decoration: none;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+.tmb-interest-card:hover {
+  border-color: var(--border-2);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.tmb-interest-card-img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(135deg, var(--bg-input), var(--border));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.tmb-interest-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.tmb-interest-card-img--placeholder svg { width: 28%; height: 28%; color: var(--text-3); opacity: .5; }
+
+.tmb-interest-card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tmb-interest-card-title {
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.25;
+}
+
+.tmb-interest-card-desc {
+  font-size: .78rem;
+  color: var(--text-2);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tmb-interest-dots { margin-top: 12px; }
+
+@media (max-width: 640px) {
+  .tmb-interest-card { flex: 0 0 84%; }
+}
+
 /* ── Mòbil ── */
 @media (max-width: 640px) {
   .tmb-news-grid { grid-template-columns: 1fr 1fr; }

@@ -27,6 +27,7 @@ const TmbHubModule = (() => {
     chevronLeft: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`,
     close: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
     external: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+    info: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="7.5" x2="12.01" y2="7.5"/></svg>`,
   };
 
   /* ══════════════════ ACCESSOS DIRECTES ══════════════════ */
@@ -92,6 +93,278 @@ const TmbHubModule = (() => {
   ];
 
   const ALL_NEWS_URL = 'https://noticies.tmb.cat';
+
+  /* ══════════════════ "ET POT INTERESSAR" (carrusel arrossegable) ══════════════════ */
+  const INTEREST_DATA = [
+    {
+      id: 'int-mapa-zones',
+      title: { ca: 'Mapa de zones', es: 'Mapa de zonas' },
+      desc: {
+        ca: 'L\'àmbit geogràfic del Sistema Tarifari Integrat de l\'àrea de Barcelona inclou set corones dividides en sectors tarifaris.',
+        es: 'El ámbito geográfico del Sistema Tarifario Integrado del área de Barcelona incluye siete coronas divididas en sectores tarifarios.'
+      },
+      image: 'https://www.tmb.cat/documents/20182/62743/Mapa+Corones+2025+TZ.png/6da09ef4-c272-e93d-8930-54e460be6411?t=1750683970915',
+      link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/zonas-tarifarias'
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {
+      id: 'int-condicions',
+      title: { ca: 'Condicions d\'ús dels bitllets', es: 'Condiciones de uso de los billetes' },
+      desc: {
+        ca: 'Caducitat, bescanvi i totes les condicions d\'ús dels títols de viatge.',
+        es: 'Caducidad, canje y todas las condiciones de uso de los títulos de viaje.'
+      },
+      image: 'https://www.tmb.cat/documents/20182/881600/subhome-bitllets-condicons-us.jpg/ee6f6b86-6e04-43f8-a1c4-4377bcd92e5f?t=1733911617553',
+      link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/condiciones-de-uso'
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {
+      id: 'int-t-mobilitat',
+      title: { ca: 'T-mobilitat', es: 'T-mobilitat' },
+      desc: {
+        ca: 'Mou-te de forma intel·ligent en transport públic.',
+        es: 'Muévete de forma inteligente en transporte público.'
+      },
+      image: 'https://www.tmb.cat/documents/20182/1534117/movilmetro4.jpg/48dee931-cbaf-b1ab-14fd-411ab1aa0ec9?t=1736425261338',
+      link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/t-mobilitat'
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {
+      id: 'int-recarrega',
+      title: { ca: 'Compra de bitllets en línia.', es: 'Compra de billetes online.' },
+      desc: {
+        ca: 'Pots comprar els bitllets i abonaments ràpidament i còmodament a través de la web o de TMB App.',
+        es: 'Puedes comprar los billetes y abonos rápida y cómodamente a través de la web o de TMB App.'
+      },
+      image: 'https://www.tmb.cat/documents/20182/881600/subhome-bitllets-compra-online.jpg/167cabcd-429f-4671-81f0-a51ee9f81c98?t=1733911617553',
+      link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/compra-billetes-online'
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {
+      id: 'int-on-comprar',
+      title: { ca: 'Punts de venda', es: 'Puntos de venta' },
+      desc: {
+        ca: 'On pots comprar els bitllets de transport públic?',
+        es: '¿Dónde puedes comprar los billetes de transporte público?'
+      },
+      image: 'https://www.tmb.cat/documents/20182/881600/subhome-bitllets-punts-venda.jpg/f63d1f75-4aa8-4c69-8c65-9269bc8622e9?t=1733911617553',
+      link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/puntos-venta'
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {
+      id: 'int-tarifes-reduides',
+      title: { ca: 'T-metropolitana', es: 'T-metropolitana' },
+      desc: {
+        ca: 'Tot sobre la T-metropolitana i les gestions que hi pots dur a terme.',
+        es: 'Todo sobre la T-metropolitana y las gestiones que puedes llevar a cabo sobre ella.'
+      },
+      image: 'https://www.tmb.cat/documents/20182/881600/T-metropolitana+-+subhome+Bitllets+i+tarifes+-+368x207.jpg/5df30858-583e-a4d0-9e46-b61e090cb4ce?t=1755079684928',
+      link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/t-metropolitana'
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {
+      id: 'int-faq',
+      title: { ca: 'Validació amb targeta bancària', es: 'Validación con tarjeta bancaria.' },
+      desc: {
+        ca: 'Compra i valida el teu bitllet senzill de bus en un sol pas amb la targeta bancària.',
+        es: 'Compra y valida tu billete sencillo de bus en un solo paso con tu tarjeta bancaria.'
+      },
+      image: 'https://www.tmb.cat/documents/20182/881600/emv-distribuidora-bitllets-tarifes.jpg/5709835c-b773-4996-895c-fede913dab3c?t=1733911617554',
+      link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/validacion-tarjeta-bancaria'
+    },
+  ];
+
+  function interestImageBlock(item) {
+    return `<div class="tmb-interest-card-img"><img src="${item.image}" alt="" loading="lazy" onerror="this.parentElement.outerHTML='<div class=&quot;tmb-interest-card-img tmb-interest-card-img--placeholder&quot;>${ICONS.info.replace(/"/g, '&quot;')}</div>'" /></div>`;
+  }
+
+  function interestCardHTML(item) {
+    const l = lang();
+    const title = item.title[l] || item.title.ca;
+    const desc = item.desc[l] || item.desc.ca;
+    return `
+      <a class="tmb-interest-card" href="${item.link}" target="_blank" rel="noopener" data-id="${item.id}">
+        ${interestImageBlock(item)}
+        <div class="tmb-interest-card-body">
+          <h3 class="tmb-interest-card-title">${title}</h3>
+          <p class="tmb-interest-card-desc">${desc}</p>
+        </div>
+      </a>`;
+  }
+
+  function renderInterestCarousel() {
+    return `
+      <div class="tmb-interest-scroll" id="tmbInterestScroll">
+        ${INTEREST_DATA.map(interestCardHTML).join('')}
+      </div>
+      <div class="tmb-carousel-dots tmb-interest-dots" id="tmbInterestDots">
+        ${INTEREST_DATA.map((_, i) => `<span class="tmb-carousel-dot ${i === 0 ? 'tmb-carousel-dot--active' : ''}" data-dot="${i}"></span>`).join('')}
+      </div>`;
+  }
+
+  function bindInterestCarousel(container) {
+    const scroller = container.querySelector('#tmbInterestScroll');
+    if (!scroller) return;
+    const cards = Array.from(scroller.children);
+    const dots = container.querySelectorAll('#tmbInterestDots .tmb-carousel-dot');
+    if (!cards.length) return;
+
+    function cardStep() {
+      const style = getComputedStyle(scroller);
+      const gap = parseFloat(style.columnGap || style.gap) || 0;
+      return cards[0].offsetWidth + gap;
+    }
+
+    function updateActive() {
+      const idx = Math.round(scroller.scrollLeft / cardStep());
+      const clamped = Math.max(0, Math.min(idx, dots.length - 1));
+      dots.forEach((d, i) => d.classList.toggle('tmb-carousel-dot--active', i === clamped));
+    }
+
+    let scrollTimer = null;
+    scroller.addEventListener('scroll', () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(updateActive, 60);
+    }, { passive: true });
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const i = parseInt(dot.getAttribute('data-dot'), 10);
+        scroller.scrollTo({ left: i * cardStep(), behavior: 'smooth' });
+      });
+    });
+
+    /* Arrossegar amb ratolí (el tàctil ja fa scroll natiu) */
+    let isDown = false;
+    let startX = 0;
+    let startScroll = 0;
+    let moved = false;
+
+    scroller.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch') return;
+      isDown = true;
+      moved = false;
+      startX = e.clientX;
+      startScroll = scroller.scrollLeft;
+      scroller.classList.add('tmb-interest-scroll--dragging');
+      scroller.setPointerCapture && scroller.setPointerCapture(e.pointerId);
+    });
+
+    scroller.addEventListener('pointermove', (e) => {
+      if (!isDown) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      scroller.scrollLeft = startScroll - dx;
+    });
+
+    function endDrag() {
+      if (!isDown) return;
+      isDown = false;
+      scroller.classList.remove('tmb-interest-scroll--dragging');
+      updateActive();
+    }
+    scroller.addEventListener('pointerup', endDrag);
+    scroller.addEventListener('pointercancel', endDrag);
+    scroller.addEventListener('pointerleave', () => { if (isDown) endDrag(); });
+
+    // Evita que un drag obri l'enllaç de la targeta
+    cards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (moved) e.preventDefault();
+      });
+    });
+
+    updateActive();
+  }
 
   /* ══════════════════ CARRUSEL D'AVISOS (autoplay + drag) ══════════════════ */
   let carouselTimer = null;
@@ -296,6 +569,18 @@ const TmbHubModule = (() => {
         </div>
         ${renderNews()}
       </section>
+
+      <section class="tmb-hub-section">
+        <div class="tmb-hub-section-header">
+          <span class="tmb-hub-section-icon">${ICONS.info}</span>
+          <h2 class="tmb-hub-section-title">${t('Et pot interessar', 'Te puede interesar')}</h2>
+        </div>
+        <p class="tmb-hub-section-sub">${t(
+          "Tota la informació que necessites sobre els bitllets per viatjar en transport públic a Barcelona i per l'àrea metropolitana.",
+          'Toda la información que necesitas sobre los billetes para viajar en transporte público en Barcelona y por el área metropolitana.'
+        )}</p>
+        ${renderInterestCarousel()}
+      </section>
     `;
 
     bindEvents(container);
@@ -413,6 +698,8 @@ const TmbHubModule = (() => {
       applyTransform(false);
       startCarouselAutoplay(api);
     }
+
+    bindInterestCarousel(container);
   }
 
   function onViewLeft() {
