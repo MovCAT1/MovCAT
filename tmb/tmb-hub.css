@@ -1,0 +1,362 @@
+/* ════════════════════════════════════════════════════════════════
+   TMB-HUB.CSS   Pantalla "TMB" (notícies, avisos, estat, bitllets)
+   ════════════════════════════════════════════════════════════════ */
+
+.tmb-hub-section {
+  padding: 0 0 26px;
+}
+
+.tmb-hub-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tmb-hub-section-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.tmb-hub-section-icon svg { width: 100%; height: 100%; }
+
+.tmb-hub-section-title {
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--text-1);
+  flex: 1;
+}
+
+.tmb-hub-section-link {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--text-3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color .15s;
+  white-space: nowrap;
+}
+.tmb-hub-section-link svg { width: 14px; height: 14px; }
+.tmb-hub-section-link:hover { color: var(--accent); }
+
+.tmb-hub-section-sub {
+  font-size: .8rem;
+  color: var(--text-2);
+  margin: -6px 0 14px;
+}
+
+/* ── Accessos directes (grid de botons) ── */
+.tmb-hub-section--shortcuts {
+  padding-top: 4px;
+}
+
+.tmb-shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.tmb-shortcut-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 8px 12px;
+  cursor: pointer;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+.tmb-shortcut-btn:hover {
+  border-color: var(--border-2);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+.tmb-shortcut-btn:active { transform: scale(.97); }
+
+.tmb-shortcut-icon {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  color: var(--accent);
+}
+.tmb-shortcut-icon svg { width: 100%; height: 100%; }
+
+.tmb-shortcut-label {
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--text-1);
+  text-align: center;
+  line-height: 1.2;
+}
+
+@media (max-width: 400px) {
+  .tmb-shortcuts-grid { gap: 8px; }
+  .tmb-shortcut-btn { padding: 13px 4px 10px; }
+  .tmb-shortcut-icon { width: 22px; height: 22px; }
+  .tmb-shortcut-label { font-size: .66rem; }
+}
+
+/* ── Avisos destacats (carrusel d'un sol slide, arrossegable) ── */
+.tmb-carousel-wrap {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.tmb-carousel-viewport {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.tmb-alerts-carousel {
+  display: flex;
+  width: 100%;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+}
+.tmb-alerts-carousel:active { cursor: grabbing; }
+
+.tmb-carousel-nav {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  align-self: center;
+  transition: border-color .15s, box-shadow .15s, transform .1s;
+}
+.tmb-carousel-nav svg { width: 16px; height: 16px; }
+.tmb-carousel-nav:hover { border-color: var(--border-2); box-shadow: var(--shadow-sm); }
+.tmb-carousel-nav:active { transform: scale(.93); }
+
+.tmb-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tmb-carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border-2);
+  cursor: pointer;
+  transition: background .2s, width .2s;
+}
+.tmb-carousel-dot--active {
+  width: 16px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .tmb-carousel-nav { display: none; }
+}
+
+.tmb-alert-card {
+  flex: 0 0 100%;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--alert-color, var(--accent));
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.tmb-alert-card-line {
+  align-self: flex-start;
+  font-size: .66rem;
+  font-weight: 700;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+}
+
+.tmb-alert-card-title {
+  font-size: .86rem;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.25;
+}
+
+.tmb-alert-card-body {
+  font-size: .76rem;
+  color: var(--text-2);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tmb-alert-empty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  font-size: .82rem;
+  color: var(--text-2);
+}
+.tmb-alert-empty-icon { width: 18px; height: 18px; color: #22c55e; flex-shrink: 0; }
+.tmb-alert-empty-icon svg { width: 100%; height: 100%; }
+
+/* ── Notícies TMB ── */
+.tmb-news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.tmb-news-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  text-decoration: none;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+.tmb-news-card:hover {
+  border-color: var(--border-2);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.tmb-news-card-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, var(--bg-input), var(--border));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.tmb-news-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tmb-news-card-img--placeholder svg { width: 30%; height: 30%; color: var(--text-3); opacity: .5; }
+
+.tmb-news-card-body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tmb-news-card-tag {
+  align-self: flex-start;
+  font-size: .64rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius: var(--r-pill);
+  padding: 3px 9px;
+}
+
+.tmb-news-card-title {
+  font-size: .84rem;
+  font-weight: 600;
+  color: var(--text-1);
+  line-height: 1.3;
+}
+
+/* ── Overlay de bitllets a pantalla completa ── */
+.tmb-tickets-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg-page);
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px 24px;
+  overflow-y: auto;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform .28s cubic-bezier(.32,.72,0,1), opacity .22s ease;
+}
+.tmb-tickets-overlay--open {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.tmb-tickets-overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.tmb-tickets-overlay-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-1);
+}
+
+.tmb-tickets-overlay-close {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.tmb-tickets-overlay-close svg { width: 17px; height: 17px; }
+.tmb-tickets-overlay-close:hover { border-color: var(--border-2); }
+
+.tmb-tickets-overlay-sub {
+  font-size: .84rem;
+  color: var(--text-2);
+  margin: 6px 0 18px;
+}
+
+.tmb-tickets-overlay-body {
+  flex: 1;
+}
+
+/* ── Mòbil ── */
+@media (max-width: 640px) {
+  .tmb-news-grid { grid-template-columns: 1fr 1fr; }
+  .tmb-news-card-body { padding: 9px 10px 11px; gap: 4px; }
+  .tmb-news-card-title { font-size: .76rem; }
+  .tmb-news-card-tag { font-size: .58rem; padding: 2px 7px; }
+}
+
+@media (max-width: 400px) {
+  .tmb-news-grid { grid-template-columns: 1fr; }
+}
