@@ -28,6 +28,20 @@ const TmbHubModule = (() => {
     close: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
     external: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
     info: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="7.5" x2="12.01" y2="7.5"/></svg>`,
+    tag: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L3 3v6.59a2 2 0 0 0 .59 1.41l9.59 9.59a2 2 0 0 0 2.82 0l4.59-4.59a2 2 0 0 0 0-2.82z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>`,
+    calendar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+    share: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>`,
+    pin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+  };
+
+  /* ── Icones de xarxes (línia, coherents amb la resta de la UI) ── */
+  const SOCIAL_ICONS = {
+    instagram: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>`,
+    x: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>`,
+    facebook: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h-2a4 4 0 0 0-4 4v3H7v4h2v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
+    youtube: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="4"/><polygon points="10 9 15.5 12 10 15" fill="currentColor" stroke="none"/></svg>`,
+    tiktok: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3v10.5a3.5 3.5 0 1 1-3.5-3.5c.17 0 .34.01.5.03V7h3a5 5 0 0 0 0 0"/><path d="M16 3a5 5 0 0 0 5 5"/></svg>`,
+    linkedin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="10" x2="7" y2="17"/><circle cx="7" cy="6.5" r="0.6" fill="currentColor" stroke="none"/><line x1="12" y1="10" x2="12" y2="17"/><path d="M12 13c0-2 2-3 3.5-3S17 11 17 13v4"/></svg>`,
   };
 
   /* ══════════════════ ACCESSOS DIRECTES ══════════════════ */
@@ -284,6 +298,252 @@ const TmbHubModule = (() => {
     updateActive();
   }
 
+  /* ══════════════════ PROMOCIONS DESTACADES (JoTMBé, contingut oficial) ══════════════════ */
+  const PROMO_DATA = [
+    {
+      id: 'promo-jotmbe',
+      badge: { ca: 'Programa de punts', es: 'Programa de puntos' },
+      title: { ca: 'JoTMBé: acumula punts i bescanvia\'ls per premis', es: 'JoTMBé: acumula puntos y cámbialos por premios' },
+      desc: {
+        ca: 'Registra\'t gratis, viatja i guanya punts que pots bescanviar per descomptes i experiències.',
+        es: 'Regístrate gratis, viaja y gana puntos que puedes cambiar por descuentos y experiencias.'
+      },
+      image: 'https://marcaporhombro.com/wp-content/uploads/2015/11/jotmbe.jpg',
+      link: 'https://www.tmb.cat/es/jotmbe/que-es-jotmbe'
+    },
+    {
+      id: 'promo-moment-guanyador',
+      badge: { ca: 'Sortejos', es: 'Sorteos' },
+      title: { ca: 'Moment guanyador JoTMBé', es: 'Momento ganador JoTMBé' },
+      desc: {
+        ca: 'Cada setmana repartim premis entre els usuaris de JoTMBé. Comprova si ets un dels guanyadors.',
+        es: 'Cada semana repartimos premios entre los usuarios de JoTMBé. Comprueba si eres uno de los ganadores.'
+      },
+      image: 'https://www.tmb.cat/documents/20182/299710/acces-recompenses-CA-ES+%281%29.jpg/1e18bd41-8dd3-4ab3-257e-97306581c10c?t=1752755356714',
+      link: 'https://www.tmb.cat/es/jotmbe/premios'
+    },
+    {
+      id: 'promo-botiga',
+      badge: { ca: 'Novetat', es: 'Novedad' },
+      title: { ca: 'La botiga TMB', es: 'La tienda TMB' },
+      desc: {
+        ca: 'Descobreix la botiga oficial amb merchandising de TMB, ara també a l\'estació de Sagrada Família.',
+        es: 'Descubre la tienda oficial con merchandising de TMB, ahora también en la estación de Sagrada Familia.'
+      },
+      image: 'https://www.tmb.cat/documents/20182/5d74a02e-cebb-9569-2799-e820c6278d47',
+      link: 'https://www.tmb.cat/es/w/novetat-botiga-tmb'
+    },
+    {
+      id: 'promo-t-metropolitana',
+      badge: { ca: 'Tarifes', es: 'Tarifas' },
+      title: { ca: 'T-metropolitana: descomptes per a residents', es: 'T-metropolitana: descuentos para residentes' },
+      desc: {
+        ca: 'Consulta les bonificacions i gestions disponibles per a la T-metropolitana.',
+        es: 'Consulta las bonificaciones y gestiones disponibles para la T-metropolitana.'
+      },
+      image: 'https://album.mediaset.es/eimg/2024/04/05/la-t-metropolitana-el-nuevo-titulo-de-transporte-publico-en-barcelona-que-sustituye-a-la-tarjeta-ros_a20d.jpg?w=1200&h=900',
+      link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/t-metropolitana'
+    },
+  ];
+
+  function promoImageBlock(item) {
+    return `<div class="tmb-promo-card-img"><img src="${item.image}" alt="" loading="lazy" draggable="false" onerror="this.parentElement.outerHTML='<div class=&quot;tmb-promo-card-img tmb-promo-card-img--placeholder&quot;>${ICONS.tag.replace(/"/g, '&quot;')}</div>'" /></div>`;
+  }
+
+  function promoCardHTML(item) {
+    const l = lang();
+    const badge = item.badge[l] || item.badge.ca;
+    const title = item.title[l] || item.title.ca;
+    const desc = item.desc[l] || item.desc.ca;
+    return `
+      <a class="tmb-promo-card" href="${item.link}" target="_blank" rel="noopener" draggable="false" data-id="${item.id}">
+        ${promoImageBlock(item)}
+        <div class="tmb-promo-card-body">
+          <span class="tmb-promo-card-badge">${badge}</span>
+          <h3 class="tmb-promo-card-title">${title}</h3>
+          <p class="tmb-promo-card-desc">${desc}</p>
+        </div>
+      </a>`;
+  }
+
+  function renderPromotions() {
+    return `
+      <div class="tmb-promo-scroll" id="tmbPromoScroll">
+        ${PROMO_DATA.map(promoCardHTML).join('')}
+      </div>
+      <div class="tmb-carousel-dots tmb-promo-dots" id="tmbPromoDots">
+        ${PROMO_DATA.map((_, i) => `<span class="tmb-carousel-dot ${i === 0 ? 'tmb-carousel-dot--active' : ''}" data-dot="${i}"></span>`).join('')}
+      </div>`;
+  }
+
+  /* ── Arrossegable amb ratolí, reaprofitant el mateix patró que "Et pot interessar" ── */
+  function bindDragScroller(container, scrollSel, dotsSel) {
+    const scroller = container.querySelector(scrollSel);
+    if (!scroller) return;
+    const cards = Array.from(scroller.children);
+    const dots = container.querySelectorAll(`${dotsSel} .tmb-carousel-dot`);
+    if (!cards.length) return;
+    const draggingClass = `${scroller.className.split(' ')[0]}--dragging`;
+
+    function cardStep() {
+      const style = getComputedStyle(scroller);
+      const gap = parseFloat(style.columnGap || style.gap) || 0;
+      return cards[0].offsetWidth + gap;
+    }
+
+    function updateActive() {
+      const idx = Math.round(scroller.scrollLeft / cardStep());
+      const clamped = Math.max(0, Math.min(idx, dots.length - 1));
+      dots.forEach((d, i) => d.classList.toggle('tmb-carousel-dot--active', i === clamped));
+    }
+
+    let scrollTimer = null;
+    scroller.addEventListener('scroll', () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(updateActive, 60);
+    }, { passive: true });
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const i = parseInt(dot.getAttribute('data-dot'), 10);
+        scroller.scrollTo({ left: i * cardStep(), behavior: 'smooth' });
+      });
+    });
+
+    let isDown = false;
+    let startX = 0;
+    let startScroll = 0;
+    let moved = false;
+
+    function onWindowMove(e) {
+      if (!isDown) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      scroller.scrollLeft = startScroll - dx;
+    }
+
+    function onWindowUp() {
+      if (!isDown) return;
+      isDown = false;
+      scroller.classList.remove(draggingClass);
+      window.removeEventListener('pointermove', onWindowMove);
+      window.removeEventListener('pointerup', onWindowUp);
+      updateActive();
+    }
+
+    scroller.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      isDown = true;
+      moved = false;
+      startX = e.clientX;
+      startScroll = scroller.scrollLeft;
+      scroller.classList.add(draggingClass);
+      window.addEventListener('pointermove', onWindowMove);
+      window.addEventListener('pointerup', onWindowUp);
+    });
+
+    cards.forEach(card => {
+      card.addEventListener('dragstart', (e) => e.preventDefault());
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (moved) return;
+        const url = card.getAttribute('href');
+        if (url) window.open(url, '_blank', 'noopener');
+      });
+    });
+
+    updateActive();
+  }
+
+  /* ══════════════════ AGENDA D'ESDEVENIMENTS (contingut oficial noves-i-agenda) ══════════════════ */
+  const EVENTS_DATA = [
+    {
+      id: 'event-pride',
+      cat: { ca: 'Acció solidària', es: 'Acción solidaria' },
+      title: { ca: 'TMB se suma a la celebració del Pride', es: 'TMB se suma a la celebración del Pride' },
+      desc: {
+        ca: 'L\'estació Universitat es vesteix dels colors de l\'orgull. Vine a viure la diversitat.',
+        es: 'La estación Universitat se viste de los colores del orgullo. Ven a vivir la diversidad.'
+      },
+      dateLabel: { ca: 'Del 6 al 19 de juliol', es: 'Del 6 al 19 de julio' },
+      place: { ca: 'Estació Universitat', es: 'Estación Universitat' },
+      link: 'https://www.tmb.cat/es/w/agenda-pride-barcelona'
+    },
+    {
+      id: 'event-naturalment',
+      cat: { ca: 'Exposició', es: 'Exposición' },
+      title: { ca: 'Exposició "Naturalment metropolitans"', es: 'Exposición "Naturalment metropolitans"' },
+      desc: {
+        ca: 'Descobreix l\'evolució de la xarxa de parcs de l\'àrea metropolitana.',
+        es: 'Descubre la evolución de la red de parques del área metropolitana.'
+      },
+      dateLabel: { ca: 'Del 14 de maig al 22 de juliol', es: 'Del 14 de mayo al 22 de julio' },
+      place: { ca: 'Espai Mercè Sala', es: 'Espacio Mercè Sala' },
+      link: 'https://fundacio.tmb.cat/es/w/activitat-exposicio-naturalment-metropolitans'
+    },
+    {
+      id: 'event-piano',
+      cat: { ca: 'Música', es: 'Música' },
+      title: { ca: 'Vine a tocar el piano a Diagonal!', es: '¡Ven a tocar el piano a Diagonal!' },
+      desc: {
+        ca: 'Acollim un piano de forma fixa i acostem la música als usuaris del metro.',
+        es: 'Acogemos un piano de forma fija y acercamos la música a los usuarios del metro.'
+      },
+      dateLabel: { ca: 'Des del 23 de març', es: 'Desde el 23 de marzo' },
+      place: { ca: 'Estació Diagonal', es: 'Estación Diagonal' },
+      link: 'https://fundacio.tmb.cat/es/w/activitat-piano-metro-maria-canals'
+    },
+  ];
+
+  const ALL_AGENDA_URL = 'https://www.tmb.cat/es/novedades-y-agenda';
+
+  function agendaCardHTML(ev) {
+    const l = lang();
+    const cat = ev.cat[l] || ev.cat.ca;
+    const title = ev.title[l] || ev.title.ca;
+    const desc = ev.desc[l] || ev.desc.ca;
+    const dateLabel = ev.dateLabel[l] || ev.dateLabel.ca;
+    const place = ev.place[l] || ev.place.ca;
+    return `
+      <a class="tmb-agenda-card" href="${ev.link}" target="_blank" rel="noopener" data-id="${ev.id}">
+        <span class="tmb-agenda-card-cat">${cat}</span>
+        <h3 class="tmb-agenda-card-title">${title}</h3>
+        <p class="tmb-agenda-card-desc">${desc}</p>
+        <div class="tmb-agenda-card-meta">
+          <span class="tmb-agenda-card-meta-item">${ICONS.calendar}${dateLabel}</span>
+          <span class="tmb-agenda-card-meta-item">${ICONS.pin}${place}</span>
+        </div>
+      </a>`;
+  }
+
+  function renderAgenda() {
+    return `<div class="tmb-agenda-list">${EVENTS_DATA.map(agendaCardHTML).join('')}</div>`;
+  }
+
+  /* ══════════════════ XARXES SOCIALS (perfils oficials, tmb.cat/es/redes-sociales) ══════════════════ */
+  const SOCIAL_DATA = [
+    { id: 'instagram', icon: SOCIAL_ICONS.instagram, name: 'Instagram', handle: '@tmb_bcn', link: 'https://www.instagram.com/tmb_bcn/?hl=es' },
+    { id: 'x-corp', icon: SOCIAL_ICONS.x, name: 'X', handle: '@TMB_Barcelona', link: 'https://x.com/TMB_Barcelona' },
+    { id: 'x-info', icon: SOCIAL_ICONS.x, name: t('X · Info servei', 'X · Info servicio'), handle: '@TMBinfo', link: 'https://twitter.com/tmbinfo?lang=es' },
+    { id: 'tiktok', icon: SOCIAL_ICONS.tiktok, name: 'TikTok', handle: '@tmb_bcn', link: 'https://www.tiktok.com/@tmb_bcn' },
+    { id: 'facebook', icon: SOCIAL_ICONS.facebook, name: 'Facebook', handle: 'TMB', link: 'https://www.facebook.com/TransportsMetropolitansdeBarcelona' },
+    { id: 'youtube', icon: SOCIAL_ICONS.youtube, name: 'YouTube', handle: t('Canal TMB', 'Canal TMB'), link: 'https://www.youtube.com/user/CanalTMB' },
+    { id: 'linkedin', icon: SOCIAL_ICONS.linkedin, name: 'LinkedIn', handle: 'TMB', link: 'https://www.linkedin.com/company/transports-metropolitans-barcelona-tmb/' },
+  ];
+
+  function socialCardHTML(s) {
+    return `
+      <a class="tmb-social-card" href="${s.link}" target="_blank" rel="noopener" data-id="${s.id}">
+        <span class="tmb-social-card-icon">${s.icon}</span>
+        <span class="tmb-social-card-name">${s.name}</span>
+        <span class="tmb-social-card-handle">${s.handle}</span>
+      </a>`;
+  }
+
+  function renderSocial() {
+    return `<div class="tmb-social-grid">${SOCIAL_DATA.map(socialCardHTML).join('')}</div>`;
+  }
+
   /* ══════════════════ CARRUSEL D'AVISOS (autoplay + drag) ══════════════════ */
   let carouselTimer = null;
   let carouselIndex = 0;
@@ -499,6 +759,33 @@ const TmbHubModule = (() => {
         )}</p>
         ${renderInterestCarousel()}
       </section>
+
+      <section class="tmb-hub-section">
+        <div class="tmb-hub-section-header">
+          <span class="tmb-hub-section-icon">${ICONS.tag}</span>
+          <h2 class="tmb-hub-section-title">${t('Promocions destacades', 'Promociones destacadas')}</h2>
+        </div>
+        ${renderPromotions()}
+      </section>
+
+      <section class="tmb-hub-section">
+        <div class="tmb-hub-section-header">
+          <span class="tmb-hub-section-icon">${ICONS.calendar}</span>
+          <h2 class="tmb-hub-section-title">${t("Agenda d'esdeveniments", 'Agenda de eventos')}</h2>
+          <a class="tmb-hub-section-link" href="${ALL_AGENDA_URL}" target="_blank" rel="noopener">
+            ${t('Totes', 'Todas')} ${ICONS.external}
+          </a>
+        </div>
+        ${renderAgenda()}
+      </section>
+
+      <section class="tmb-hub-section">
+        <div class="tmb-hub-section-header">
+          <span class="tmb-hub-section-icon">${ICONS.share}</span>
+          <h2 class="tmb-hub-section-title">${t('Xarxes socials', 'Redes sociales')}</h2>
+        </div>
+        ${renderSocial()}
+      </section>
     `;
 
     bindEvents(container);
@@ -618,6 +905,7 @@ const TmbHubModule = (() => {
     }
 
     bindInterestCarousel(container);
+    bindDragScroller(container, '#tmbPromoScroll', '#tmbPromoDots');
   }
 
   function onViewLeft() {

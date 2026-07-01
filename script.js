@@ -4302,21 +4302,51 @@ const RealtimeModule = (() => {
 
     try {
       const { LINES, LINE_COLORS, getSimulatedLineStatus } = window.MOVCAT_DATA;
-      const alerts = Object.values(LINES)
+
+      function modeForOperator(operatorId) {
+        if (operatorId === 'metro') return 'metro';
+        if (operatorId === 'tmb_bus') return 'bus';
+        return 'train'; // renfe, fgc, trambaix, trambesosop…
+      }
+
+      const trainAlerts = Object.values(LINES)
         .map(line => ({ line, status: getSimulatedLineStatus(line.id) }))
         .filter(({ status }) => status.severity > 0)
         .map(({ line, status }, i) => ({
           id: `alert-${line.id}-${now}`,
           type: status.id === 'partial' ? 'partial' : status.id === 'cut' ? 'cut' : 'delay',
+          mode: modeForOperator(line.operator),
           lineLabel: line.label,
           lineColor: LINE_COLORS[line.id] || '#888',
           title: status.label,
           body: status.message,
           severity: status.severity,
           timestamp: new Date(now - i * 5 * 60000).toISOString(),
-        }))
+        }));
+
+      // Busos TMB: mateixa lògica, però amb la simulació pròpia de bus-data.js
+      let busAlerts = [];
+      if (window.MOVCAT_BUS) {
+        const { BUS_LINES, getSimulatedBusStatus } = window.MOVCAT_BUS;
+        busAlerts = Object.values(BUS_LINES)
+          .map(line => ({ line, status: getSimulatedBusStatus(line.id) }))
+          .filter(({ status }) => status.severity > 0)
+          .map(({ line, status }, i) => ({
+            id: `alert-bus-${line.id}-${now}`,
+            type: status.id === 'partial' ? 'partial' : status.id === 'cut' ? 'cut' : 'delay',
+            mode: 'bus',
+            lineLabel: line.label,
+            lineColor: line.color,
+            title: status.label,
+            body: status.message,
+            severity: status.severity,
+            timestamp: new Date(now - i * 5 * 60000).toISOString(),
+          }));
+      }
+
+      const alerts = [...trainAlerts, ...busAlerts]
         .sort((a, b) => b.severity - a.severity)
-        .slice(0, 6);
+        .slice(0, 12);
 
       _cachedAlerts = alerts;
       _alertsCacheTime = now;
@@ -4340,6 +4370,7 @@ const RealtimeModule = (() => {
     // Re-render si la vista d'alertes o home està activa
     if (window.UIModule) {
       UIModule.renderHomeView?.();
+      UIModule.refreshIfActive?.('alerts');
     }
   });
 
@@ -4546,6 +4577,65 @@ const RealtimeModule = (() => {
     
   }
 
+  /* ══════════════════ RENDER: ESTAT DEL SERVEI (grid tipus TMB) ══════════════════ */
+  const ALERTS_MODE_ICONS = {
+    train: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="13" rx="2"/><path d="M4 11h16"/><path d="M9.5 16.5 7 20M14.5 16.5 17 20"/><circle cx="8.5" cy="8" r="1"/><circle cx="15.5" cy="8" r="1"/></svg>`,
+    metro: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 11h16"/><circle cx="8.5" cy="18.5" r="1.6"/><circle cx="15.5" cy="18.5" r="1.6"/></svg>`,
+    bus:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M3 11h18"/><circle cx="7.5" cy="19" r="1.6"/><circle cx="16.5" cy="19" r="1.6"/></svg>`,
+  };
+
+  function renderAlertsStatusOverview(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // Mentre encara no hi ha cache, no mostrem res (l'spinner ja el
+    // fa renderAlerts() a sota, per no duplicar-lo)
+    if (_cachedAlerts === null) { container.innerHTML = ''; return; }
+
+    const lang = I18N.getLang();
+    const alerts = getActiveAlerts();
+
+    const modes = [
+      { id: 'train', label: lang === 'es' ? 'Tren'  : 'Tren'  },
+      { id: 'metro', label: lang === 'es' ? 'Metro' : 'Metro' },
+      { id: 'bus',   label: 'Bus' },
+    ];
+
+    const rowsHTML = modes.map(m => {
+      const lines = alerts.filter(a => a.mode === m.id);
+      if (!lines.length) return '';
+      const seen = new Set();
+      const chips = lines.filter(a => {
+        if (seen.has(a.lineLabel)) return false;
+        seen.add(a.lineLabel);
+        return true;
+      });
+      return `
+        <div class="alerts-status-row">
+          <div class="alerts-status-mode">
+            <span class="alerts-status-mode-icon">${ALERTS_MODE_ICONS[m.id]}</span>
+            <span class="alerts-status-mode-label">${m.label}</span>
+          </div>
+          <div class="alerts-status-circles">
+            ${chips.map(a => `<span class="alerts-status-circle" style="background:${a.lineColor}" title="${a.title}">${a.lineLabel}</span>`).join('')}
+          </div>
+        </div>`;
+    }).filter(Boolean).join('');
+
+    if (!rowsHTML) { container.innerHTML = ''; return; }
+
+    container.innerHTML = `
+      <div class="alerts-status-card">
+        <div class="alerts-status-header">
+          <h2 class="alerts-status-title">${lang === 'es' ? 'Estado del servicio' : 'Estat del servei'}</h2>
+        </div>
+        <p class="alerts-status-sub">${lang === 'es'
+          ? 'Líneas con alteraciones de recorrido previstas o incidencias de circulación.'
+          : 'Línies amb alteracions de recorregut previstes o incidències de circulació.'}</p>
+        ${rowsHTML}
+      </div>`;
+  }
+
   /* ══════════════════ RENDER: ALERTES ══════════════════ */
   function renderAlerts(containerId) {
     const container = document.getElementById(containerId);
@@ -4689,6 +4779,7 @@ const RealtimeModule = (() => {
     getDeparturesForStation,
     renderLineStatusPanel,
     renderAlerts,
+    renderAlertsStatusOverview,
     renderLineStatusDetail,
     formatRelativeTime,
     formatTimestamp,
@@ -5579,6 +5670,7 @@ const UIModule = (() => {
 
   /* ══════════════════ VISTA ALERTES ══════════════════ */
   function renderAlertsView() {
+    RealtimeModule.renderAlertsStatusOverview('alertsStatusOverview');
     RealtimeModule.renderAlerts('alertsContainer');
     const btn = document.getElementById('alertsRefreshBtn');
     if (btn) {
@@ -5862,6 +5954,13 @@ const UIModule = (() => {
   `;
   document.head.appendChild(searchSectionStyle);
 
+  function refreshIfActive(viewId) {
+    if (currentView !== viewId) return;
+    if (viewId === 'alerts') renderAlertsView();
+    if (viewId === 'home')   renderHomeView();
+    if (viewId === 'lines')  renderLinesView();
+  }
+
   return {
     navigateTo,
     showToast,
@@ -5875,6 +5974,7 @@ const UIModule = (() => {
     renderAlertsView,
     renderMapView,
     calculateAndShowRoute,
+    refreshIfActive,
     init,
   };
 })();

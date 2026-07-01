@@ -92,6 +92,22 @@ Object.values(BUS_LINES).forEach(line => {
     .map(s => s.name);
 });
 
+/* ─── ESTAT SIMULAT DE LÍNIA (mateixa lògica que els trens, per coherència
+   a "Estat del servei" i a la pantalla d'Incidències) ─── */
+const BUS_STATUS_TYPES = {
+  NORMAL:  { id: 'normal',  label: 'Servei normal', color: '#22c55e', severity: 0 },
+  DELAY:   { id: 'delay',   label: 'Retards',        color: '#f59e0b', severity: 1 },
+  PARTIAL: { id: 'partial', label: 'Servei parcial', color: '#f97316', severity: 2 },
+  CUT:     { id: 'cut',     label: 'Tall de servei', color: '#ef4444', severity: 3 },
+};
+function getSimulatedBusStatus(lineId) {
+  const hour = new Date().getHours();
+  const seed = (lineId.charCodeAt(0) + lineId.length * 3 + hour) % 12;
+  if (seed === 0) return { ...BUS_STATUS_TYPES.DELAY,   message: 'Retards per intensitat de trànsit' };
+  if (seed === 1) return { ...BUS_STATUS_TYPES.PARTIAL, message: 'Recorregut alterat per obres a la via' };
+  return { ...BUS_STATUS_TYPES.NORMAL, message: 'El bus circula amb normalitat' };
+}
+
 /* ─── FREQÜÈNCIES APROXIMADES (minuts) per estimar pas si no hi ha API real ─── */
 const BUS_FREQ_MIN = { H: 8, V: 9, D: 7, X: 12 };
 function busFrequency(lineId) {
@@ -166,5 +182,7 @@ window.MOVCAT_BUS = {
   BUS_NET_COLORS,
   busLineColor,
   busFrequency,
+  BUS_STATUS_TYPES,
+  getSimulatedBusStatus,
   BusRealtimeModule,
 };

@@ -685,6 +685,76 @@ ul,ol   { list-style: none; }
 /* ════════════════════════════════════════
    VISTA ALERTES
 ════════════════════════════════════════ */
+/* ── Estat del servei (graella d'icones + cercles de línia, estil app TMB) ── */
+.alerts-status-overview { padding: 0 16px; }
+.alerts-status-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 18px 18px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.alerts-status-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.alerts-status-title { font-size: .98rem; font-weight: 700; color: var(--text-1); }
+.alerts-status-sub { font-size: .78rem; color: var(--text-2); line-height: 1.45; margin: -8px 0 0; }
+
+.alerts-status-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.alerts-status-row:first-of-type { padding-top: 0; border-top: none; }
+
+.alerts-status-mode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 46px;
+  flex-shrink: 0;
+  color: var(--text-2);
+}
+.alerts-status-mode-icon { width: 22px; height: 22px; color: var(--text-1); }
+.alerts-status-mode-icon svg { width: 100%; height: 100%; }
+.alerts-status-mode-label { font-size: .66rem; font-weight: 600; text-align: center; }
+
+.alerts-status-circles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding-top: 2px;
+}
+.alerts-status-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 4px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: default;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+}
+
+@media (max-width: 480px) {
+  .alerts-status-card { padding: 14px 14px 16px; }
+  .alerts-status-mode { width: 40px; }
+  .alerts-status-mode-icon { width: 19px; height: 19px; }
+  .alerts-status-mode-label { font-size: .62rem; }
+  .alerts-status-circle { min-width: 30px; height: 30px; font-size: .66rem; }
+  .alerts-status-circles { gap: 6px; }
+}
+
 .alerts-container { padding: 0 16px; display: flex; flex-direction: column; gap: 9px; }
 .alerts-loading {
   display: flex; flex-direction: column; align-items: center; gap: 12px;
