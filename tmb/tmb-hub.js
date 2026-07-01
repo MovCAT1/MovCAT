@@ -59,35 +59,42 @@ const TmbHubModule = (() => {
       id: 'news-tour-france',
       title: { ca: 'Afectacions per la sortida del Tour de França a Barcelona', es: 'Afectaciones por la salida del Tour de Francia en Barcelona' },
       tag: { ca: 'Avís', es: 'Aviso' },
-      image: '',
+      image: 'https://www.tmb.cat/documents/20182/1987352/tour-cap%C3%A7alera.jpg/bda28fd2-bd23-518b-a632-64e7889673d9?t=1781693116282',
       link: 'https://www.tmb.cat/es/tour-de-france',
     },
     {
       id: 'news-verdaguer',
       title: { ca: 'Tancament de Verdaguer i altres afectacions per obres de millora', es: 'Cierre de Verdaguer y otras afectaciones por obras de mejora' },
       tag: { ca: 'Obres', es: 'Obras' },
-      image: '',
+      image: 'https://www.tmb.cat/documents/20182/4046ab5d-1656-1b9a-56d2-4cf2ca728e7a',
       link: 'https://www.tmb.cat/es/conoce-tmb/mejoras-red-transporte/metro/corte-l4-2026',
     },
     {
       id: 'news-pride',
       title: { ca: 'TMB se suma a la celebració del Pride', es: 'TMB se suma a la celebración del Pride' },
       tag: { ca: 'Agenda', es: 'Agenda' },
-      image: '',
+      image: 'https://www.tmb.cat/documents/20182/4d7c5cc4-4faa-5455-0ee5-9b940ebcafc2',
       link: 'https://www.tmb.cat/es/w/agenda-pride-barcelona',
     },
     {
       id: 'news-platges',
       title: { ca: 'Millores en el servei de bus a la zona de platges', es: 'Mejoras en el servicio de bus en la zona de playas' },
       tag: { ca: 'Servei', es: 'Servicio' },
-      image: '',
+      image: 'https://www.tmb.cat/documents/d/tmb/v29-d20-busos-928x150-jpg',
       link: 'https://www.tmb.cat/es/-/millores-al-servei-de-bus',
+    },
+    {
+      id: 'news-roda',
+      title: { ca: 'Ja pots participar a Roda a TMB!', es: '¡Ya puedes participar en Roda a TMB!' },
+      tag: { ca: 'Roda & TMB', es: 'Roda & TMB' },
+      image: 'https://www.tmb.cat/documents/20182/0c27d9f3-fd8f-22d7-0fec-4906ea42ad88',
+      link: 'https://subtravellingfestival.tmb.cat/es',
     },
     {
       id: 'news-t-mobilitat',
       title: { ca: 'Amb la T-mobilitat, viatja de forma intel·ligent en transport públic', es: 'Con la T-mobilitat, viaja de forma inteligente en transporte público' },
       tag: { ca: 'T-mobilitat', es: 'T-mobilitat' },
-      image: '',
+      image: 'https://www.tmb.cat/documents/20182/687997/que-es-t-mobilitat-nova.jpg/84f8b73d-b8dc-4386-8bd7-16a521091809?t=1733911617826',
       link: 'https://www.tmb.cat/es/t-mobilitat',
     },
   ];
@@ -104,49 +111,8 @@ const TmbHubModule = (() => {
         es: 'El ámbito geográfico del Sistema Tarifario Integrado del área de Barcelona incluye siete coronas divididas en sectores tarifarios.'
       },
       image: 'https://www.tmb.cat/documents/20182/62743/Mapa+Corones+2025+TZ.png/6da09ef4-c272-e93d-8930-54e460be6411?t=1750683970915',
-      link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/zonas-tarifarias'
+      link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/mapa-zonas'
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    {
-      id: 'int-condicions',
-      title: { ca: 'Condicions d\'ús dels bitllets', es: 'Condiciones de uso de los billetes' },
-      desc: {
-        ca: 'Caducitat, bescanvi i totes les condicions d\'ús dels títols de viatge.',
-        es: 'Caducidad, canje y todas las condiciones de uso de los títulos de viaje.'
-      },
-      image: 'https://www.tmb.cat/documents/20182/881600/subhome-bitllets-condicons-us.jpg/ee6f6b86-6e04-43f8-a1c4-4377bcd92e5f?t=1733911617553',
-      link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/condiciones-de-uso'
-    },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     {
       id: 'int-t-mobilitat',
       title: { ca: 'T-mobilitat', es: 'T-mobilitat' },
@@ -157,22 +123,6 @@ const TmbHubModule = (() => {
       image: 'https://www.tmb.cat/documents/20182/1534117/movilmetro4.jpg/48dee931-cbaf-b1ab-14fd-411ab1aa0ec9?t=1736425261338',
       link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/t-mobilitat'
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     {
       id: 'int-recarrega',
       title: { ca: 'Compra de bitllets en línia.', es: 'Compra de billetes online.' },
@@ -183,24 +133,6 @@ const TmbHubModule = (() => {
       image: 'https://www.tmb.cat/documents/20182/881600/subhome-bitllets-compra-online.jpg/167cabcd-429f-4671-81f0-a51ee9f81c98?t=1733911617553',
       link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/compra-billetes-online'
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     {
       id: 'int-on-comprar',
       title: { ca: 'Punts de venda', es: 'Puntos de venta' },
@@ -211,22 +143,6 @@ const TmbHubModule = (() => {
       image: 'https://www.tmb.cat/documents/20182/881600/subhome-bitllets-punts-venda.jpg/f63d1f75-4aa8-4c69-8c65-9269bc8622e9?t=1733911617553',
       link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/puntos-venta'
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     {
       id: 'int-tarifes-reduides',
       title: { ca: 'T-metropolitana', es: 'T-metropolitana' },
@@ -237,20 +153,6 @@ const TmbHubModule = (() => {
       image: 'https://www.tmb.cat/documents/20182/881600/T-metropolitana+-+subhome+Bitllets+i+tarifes+-+368x207.jpg/5df30858-583e-a4d0-9e46-b61e090cb4ce?t=1755079684928',
       link: 'https://www.tmb.cat/es/tarifas-metro-bus-barcelona/t-metropolitana'
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     {
       id: 'int-faq',
       title: { ca: 'Validació amb targeta bancària', es: 'Validación con tarjeta bancaria.' },
@@ -264,7 +166,7 @@ const TmbHubModule = (() => {
   ];
 
   function interestImageBlock(item) {
-    return `<div class="tmb-interest-card-img"><img src="${item.image}" alt="" loading="lazy" onerror="this.parentElement.outerHTML='<div class=&quot;tmb-interest-card-img tmb-interest-card-img--placeholder&quot;>${ICONS.info.replace(/"/g, '&quot;')}</div>'" /></div>`;
+    return `<div class="tmb-interest-card-img"><img src="${item.image}" alt="" loading="lazy" draggable="false" onerror="this.parentElement.outerHTML='<div class=&quot;tmb-interest-card-img tmb-interest-card-img--placeholder&quot;>${ICONS.info.replace(/"/g, '&quot;')}</div>'" /></div>`;
   }
 
   function interestCardHTML(item) {
@@ -272,7 +174,7 @@ const TmbHubModule = (() => {
     const title = item.title[l] || item.title.ca;
     const desc = item.desc[l] || item.desc.ca;
     return `
-      <a class="tmb-interest-card" href="${item.link}" target="_blank" rel="noopener" data-id="${item.id}">
+      <a class="tmb-interest-card" href="${item.link}" target="_blank" rel="noopener" draggable="false" data-id="${item.id}">
         ${interestImageBlock(item)}
         <div class="tmb-interest-card-body">
           <h3 class="tmb-interest-card-title">${title}</h3>
@@ -323,43 +225,59 @@ const TmbHubModule = (() => {
       });
     });
 
-    /* Arrossegar amb ratolí (el tàctil ja fa scroll natiu) */
+    /* Arrossegar amb ratolí: control manual perquè el gest sigui fluid.
+       NO fem servir setPointerCapture: capturava el punter fins i tot en
+       un simple clic i això feia que el navegador no arribés a disparar
+       el click natiu de l'enllaç (per això la notícia no s'obria mai).
+       En comptes d'això, escoltem el moviment a `window` mentre dura
+       l'arrossegament. El tàctil ja fa scroll natiu i el navegador ja
+       distingeix bé un tap d'un arrossegament, així que no el toquem. */
     let isDown = false;
     let startX = 0;
     let startScroll = 0;
     let moved = false;
 
+    function onWindowMove(e) {
+      if (!isDown) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      scroller.scrollLeft = startScroll - dx;
+    }
+
+    function onWindowUp() {
+      if (!isDown) return;
+      isDown = false;
+      scroller.classList.remove('tmb-interest-scroll--dragging');
+      window.removeEventListener('pointermove', onWindowMove);
+      window.removeEventListener('pointerup', onWindowUp);
+      updateActive();
+    }
+
     scroller.addEventListener('pointerdown', (e) => {
-      if (e.pointerType === 'touch') return;
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
       isDown = true;
       moved = false;
       startX = e.clientX;
       startScroll = scroller.scrollLeft;
       scroller.classList.add('tmb-interest-scroll--dragging');
-      scroller.setPointerCapture && scroller.setPointerCapture(e.pointerId);
+      window.addEventListener('pointermove', onWindowMove);
+      window.addEventListener('pointerup', onWindowUp);
     });
 
-    scroller.addEventListener('pointermove', (e) => {
-      if (!isDown) return;
-      const dx = e.clientX - startX;
-      if (Math.abs(dx) > 4) moved = true;
-      scroller.scrollLeft = startScroll - dx;
-    });
-
-    function endDrag() {
-      if (!isDown) return;
-      isDown = false;
-      scroller.classList.remove('tmb-interest-scroll--dragging');
-      updateActive();
-    }
-    scroller.addEventListener('pointerup', endDrag);
-    scroller.addEventListener('pointercancel', endDrag);
-    scroller.addEventListener('pointerleave', () => { if (isDown) endDrag(); });
-
-    // Evita que un drag obri l'enllaç de la targeta
+    // Bloqueja el drag nadiu del navegador (enllaç/imatge), que feia
+    // que l'arrossegament amb ratolí no fos fluid.
     cards.forEach(card => {
+      card.addEventListener('dragstart', (e) => e.preventDefault());
+      // Amb ratolí, només obre la notícia si NO hi ha hagut arrossegament.
+      // Amb tàctil, el navegador ja gestiona correctament tap vs. scroll.
+      // Fem servir window.open manualment (com el botó "Comprar ara")
+      // perquè alguns entorns de previsualització bloquegen la navegació
+      // per defecte d'un <a target="_blank"> però sí permeten window.open.
       card.addEventListener('click', (e) => {
-        if (moved) e.preventDefault();
+        e.preventDefault();
+        if (moved) return;
+        const url = card.getAttribute('href');
+        if (url) window.open(url, '_blank', 'noopener');
       });
     });
 
