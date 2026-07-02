@@ -1827,7 +1827,7 @@ ul,ol   { list-style: none; }
 
 /* Tipografia de senyalètica — "split-flap" per a hores i codis de línia,
    inspirada en els panells reals de Rodalies/TMB. Signatura visual
-   pròpia de MovCat, diferenciada de la resta de la interfície en Inter. */
+   pròpia de Avancem, diferenciada de la resta de la interfície en Inter. */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap');
 
 .header-clock,
@@ -1863,10 +1863,10 @@ ul,ol   { list-style: none; }
   font-size: .72rem; font-weight: 600; color: var(--accent);
   background: var(--accent-2); padding: 4px 9px; border-radius: var(--r-pill);
 }
-.movcat-marker--bus { opacity: .92; }
+.avancem-marker--bus { opacity: .92; }
 
-.view-refresh-btn.is-loading svg { animation: movcat-spin .8s linear infinite; }
-@keyframes movcat-spin { to { transform: rotate(360deg); } }
+.view-refresh-btn.is-loading svg { animation: avancem-spin .8s linear infinite; }
+@keyframes avancem-spin { to { transform: rotate(360deg); } }
 
 /* ─── Parades a prop (geolocalització) ─── */
 .home-nearby-cta {
@@ -1963,3 +1963,38 @@ ul,ol   { list-style: none; }
 }
 .sidebar-notify-btn:hover { border-color: var(--border-2); color: var(--text-1); }
 .sidebar-notify-btn.is-active { color: var(--accent); border-color: var(--accent); background: var(--accent-2); }
+/* ─── SPLASH SCREEN ───
+   Pantalla de càrrega mostrada en obrir l'app/PWA, amb el
+   logo d'Avancem. Es tanca automàticament un cop l'app ha
+   carregat (veure script inline a index.html). */
+.app-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg, #ffffff);
+  opacity: 1;
+  transition: opacity .4s ease;
+}
+
+.app-splash-logo {
+  width: min(64vw, 280px);
+  height: auto;
+  animation: app-splash-in .5s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes app-splash-in {
+  from { opacity: 0; transform: scale(.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.app-splash--hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-splash-logo { animation: none; }
+}

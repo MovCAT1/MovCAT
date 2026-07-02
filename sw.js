@@ -1,7 +1,7 @@
 'use strict';
 
 /* ════════════════════════════════════════════════════════════
-   SW.JS — Service Worker de MovCat
+   SW.JS — Service Worker de Avancem
    Cache de l'app shell (HTML/CSS/JS/icona) per poder obrir
    l'app sense cobertura (p. ex. dins un túnel de metro).
    Les dades en directe (horaris, iBus, OSM) sempre es demanen
@@ -9,7 +9,7 @@
    des de cache.
    ════════════════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'movcat-shell-v1';
+const CACHE_NAME = 'avancem-shell-v1';
 const APP_SHELL = [
   './',
   './index.html',
@@ -20,7 +20,8 @@ const APP_SHELL = [
   './bus-ui.js',
   './trip-mode.js',
   './manifest.json',
-  './movcat.png',
+  './avancem.png',
+  './avancem-logo.png',
 ];
 
 self.addEventListener('install', event => {
@@ -62,7 +63,7 @@ self.addEventListener('fetch', event => {
 /* Notificacions locals (mostrades pel propi navegador mentre el
    procés està actiu). Per a notificacions push reals amb l'app
    tancada caldria un servidor push (web-push) — no inclòs aquí
-   perquè MovCat no té backend propi. */
+   perquè Avancem no té backend propi. */
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil(

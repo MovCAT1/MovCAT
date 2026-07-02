@@ -3596,7 +3596,7 @@ function getSimulatedDepartures(stationId, lineId, count = 6) {
 }
 
 /* ─── EXPORTACIONES GLOBALES ─── */
-window.MOVCAT_DATA = {
+window.AVANCEM_DATA = {
   LINE_COLORS,
   OPERATORS,
   LINES,
@@ -3613,7 +3613,7 @@ window.MOVCAT_DATA = {
 
 const StationsModule = (() => {
   let favorites = [];
-  const FAVORITES_KEY = 'movcat_favorites_v3';
+  const FAVORITES_KEY = 'avancem_favorites_v3';
 
   /* ══════════════════ FAVORITS ══════════════════ */
   function loadFavorites() {
@@ -3651,7 +3651,7 @@ const StationsModule = (() => {
   }
 
   function getFavoriteStations() {
-    const { STATIONS } = window.MOVCAT_DATA;
+    const { STATIONS } = window.AVANCEM_DATA;
     return favorites.map(id => STATIONS[id]).filter(Boolean);
   }
 
@@ -3663,7 +3663,7 @@ const StationsModule = (() => {
   }
 
   function searchStations(query, limit = 12) {
-    const { STATIONS } = window.MOVCAT_DATA;
+    const { STATIONS } = window.AVANCEM_DATA;
     if (!query || query.trim().length < 1) return [];
     const q = normalize(query.trim());
 
@@ -3690,7 +3690,7 @@ const StationsModule = (() => {
 
   /* ══════════════════ DETALL ══════════════════ */
   function getStationDetail(stationId) {
-    const { STATIONS, LINES, getSimulatedDepartures, getSimulatedLineStatus } = window.MOVCAT_DATA;
+    const { STATIONS, LINES, getSimulatedDepartures, getSimulatedLineStatus } = window.AVANCEM_DATA;
     const station = STATIONS[stationId];
     if (!station) return null;
 
@@ -3710,12 +3710,12 @@ const StationsModule = (() => {
   /* ══════════════════ RENDER PANEL ESTACIÓ ══════════════════ */
   function renderStationDetail(stationId) {
     const detail = getStationDetail(stationId);
-    if (!detail) { console.warn('MovCat: estació no trobada', stationId); return; }
+    if (!detail) { console.warn('Avancem: estació no trobada', stationId); return; }
     const panel = document.getElementById('stationDetailPanel');
     const cnt   = panel ? panel.querySelector('.station-detail-content') : null;
     if (!panel || !cnt) return;
 
-    const { LINE_COLORS, LINES } = window.MOVCAT_DATA;
+    const { LINE_COLORS, LINES } = window.AVANCEM_DATA;
     const lang        = I18N.getLang();
     const firstLineId = detail.lines?.[0];
     const firstLine   = firstLineId ? LINES[firstLineId] : null;
@@ -3803,7 +3803,7 @@ const StationsModule = (() => {
 
   function _renderConnectionsNew(connections, lang) {
     if (!connections) return '';
-    const { LINE_COLORS } = window.MOVCAT_DATA;
+    const { LINE_COLORS } = window.AVANCEM_DATA;
     const items = [];
     if (connections.metro?.length) {
       items.push(`<div class="sdp-conn-item">
@@ -3830,7 +3830,7 @@ const StationsModule = (() => {
 
     function _renderConnections(connections) {
     if (!connections) return '';
-    const { LINE_COLORS } = window.MOVCAT_DATA;
+    const { LINE_COLORS } = window.AVANCEM_DATA;
     const items = [];
     if (connections.metro?.length) {
       items.push(`
@@ -3862,14 +3862,14 @@ const StationsModule = (() => {
 
   /* ══════════════════ HELPERS ══════════════════ */
   function getStationsByLine(lineId) {
-    const { STATIONS } = window.MOVCAT_DATA;
+    const { STATIONS } = window.AVANCEM_DATA;
     return Object.values(STATIONS)
       .filter(st => st.lines && st.lines.includes(lineId))
       .sort((a, b) => a.name.localeCompare(b.name, 'ca'));
   }
 
   function getPopularLines() {
-    const { LINES, getSimulatedLineStatus } = window.MOVCAT_DATA;
+    const { LINES, getSimulatedLineStatus } = window.AVANCEM_DATA;
     return Object.values(LINES).map(line => ({
       ...line,
       status: getSimulatedLineStatus(line.id),
@@ -3912,8 +3912,8 @@ const RoutesModule = (() => {
 
   function buildGraph() {
     if (graph) return graph;
-    const { STATIONS, LINES } = window.MOVCAT_DATA;
-    const { BUS_STOPS, BUS_LINES } = window.MOVCAT_BUS || { BUS_STOPS: {}, BUS_LINES: {} };
+    const { STATIONS, LINES } = window.AVANCEM_DATA;
+    const { BUS_STOPS, BUS_LINES } = window.AVANCEM_BUS || { BUS_STOPS: {}, BUS_LINES: {} };
     graph = {}; // nodeKey -> [ { nodeKey, cost, type } ]
 
     const nodeKey = (stationId, lineId) => `${stationId}::${lineId}`;
@@ -3990,29 +3990,29 @@ const RoutesModule = (() => {
   }
 
   function getStop(stopId) {
-    const { STATIONS } = window.MOVCAT_DATA;
-    const { BUS_STOPS } = window.MOVCAT_BUS || { BUS_STOPS: {} };
+    const { STATIONS } = window.AVANCEM_DATA;
+    const { BUS_STOPS } = window.AVANCEM_BUS || { BUS_STOPS: {} };
     return STATIONS[stopId] || BUS_STOPS[stopId] || null;
   }
 
   function getLine(lineId) {
-    const { LINES } = window.MOVCAT_DATA;
-    const { BUS_LINES } = window.MOVCAT_BUS || { BUS_LINES: {} };
+    const { LINES } = window.AVANCEM_DATA;
+    const { BUS_LINES } = window.AVANCEM_BUS || { BUS_LINES: {} };
     return LINES[lineId] || BUS_LINES[lineId] || null;
   }
 
   function getLineColor(lineId) {
     const line = getLine(lineId);
     if (line && line.color) return line.color;
-    return window.MOVCAT_DATA.LINE_COLORS[lineId] || '#888';
+    return window.AVANCEM_DATA.LINE_COLORS[lineId] || '#888';
   }
 
   /* Cache nombre → parada (tren o bus) */
   const stationNameCache = {};
   function findStationByName(name) {
     if (stationNameCache[name]) return stationNameCache[name];
-    const { STATIONS } = window.MOVCAT_DATA;
-    const { BUS_STOPS } = window.MOVCAT_BUS || { BUS_STOPS: {} };
+    const { STATIONS } = window.AVANCEM_DATA;
+    const { BUS_STOPS } = window.AVANCEM_BUS || { BUS_STOPS: {} };
     let st = Object.values(STATIONS).find(s => s.name === name || s.shortName === name);
     if (!st) st = Object.values(BUS_STOPS).find(s => s.name === name || s.shortName === name);
     if (st) stationNameCache[name] = st;
@@ -4208,7 +4208,7 @@ const RoutesModule = (() => {
   /* ══════════════════════════════════════
      HISTORIAL DE BÚSQUEDAS
   ══════════════════════════════════════ */
-  const HISTORY_KEY = 'movcat_route_history';
+  const HISTORY_KEY = 'avancem_route_history';
   let searchHistory = [];
 
   function loadHistory() {
@@ -4270,7 +4270,7 @@ const RealtimeModule = (() => {
 
   /* ══════════════════ ESTAT DE TOTES LES LÍNIES ══════════════════ */
   function getAllLineStatuses() {
-    const { LINES, getSimulatedLineStatus } = window.MOVCAT_DATA;
+    const { LINES, getSimulatedLineStatus } = window.AVANCEM_DATA;
     return Object.values(LINES).map(line => ({
       ...line,
       status: getSimulatedLineStatus(line.id),
@@ -4288,7 +4288,7 @@ const RealtimeModule = (() => {
   const ALERTS_CACHE_MS = 5 * 60 * 1000; // 5 minuts
 
   async function fetchRealAlerts() {
-    // MovCat no té backend propi, per tant no pot consultar de forma
+    // Avancem no té backend propi, per tant no pot consultar de forma
     // fiable i gratuïta els feeds interns d'incidències de Rodalies/FGC/TMB
     // (no exposen una API pública amb CORS obert). Per evitar mostrar
     // dades inventades com si fossin "reals", les alertes es generen
@@ -4301,7 +4301,7 @@ const RealtimeModule = (() => {
     }
 
     try {
-      const { LINES, LINE_COLORS, getSimulatedLineStatus } = window.MOVCAT_DATA;
+      const { LINES, LINE_COLORS, getSimulatedLineStatus } = window.AVANCEM_DATA;
 
       function modeForOperator(operatorId) {
         if (operatorId === 'metro') return 'metro';
@@ -4326,8 +4326,8 @@ const RealtimeModule = (() => {
 
       // Busos TMB: mateixa lògica, però amb la simulació pròpia de bus-data.js
       let busAlerts = [];
-      if (window.MOVCAT_BUS) {
-        const { BUS_LINES, getSimulatedBusStatus } = window.MOVCAT_BUS;
+      if (window.AVANCEM_BUS) {
+        const { BUS_LINES, getSimulatedBusStatus } = window.AVANCEM_BUS;
         busAlerts = Object.values(BUS_LINES)
           .map(line => ({ line, status: getSimulatedBusStatus(line.id) }))
           .filter(({ status }) => status.severity > 0)
@@ -4352,7 +4352,7 @@ const RealtimeModule = (() => {
       _alertsCacheTime = now;
       return alerts;
     } catch (e) {
-      console.warn('MovCat: no s\'han pogut generar les alertes', e);
+      console.warn('Avancem: no s\'han pogut generar les alertes', e);
       _cachedAlerts = [];
       _alertsCacheTime = now;
       return [];
@@ -4376,7 +4376,7 @@ const RealtimeModule = (() => {
 
   /* ══════════════════ SORTIDES PER ESTACIÓ ══════════════════ */
   function getDeparturesForStation(stationId) {
-    const { STATIONS, getSimulatedDepartures, LINES, LINE_COLORS } = window.MOVCAT_DATA;
+    const { STATIONS, getSimulatedDepartures, LINES, LINE_COLORS } = window.AVANCEM_DATA;
     const station = STATIONS[stationId];
     if (!station) return [];
 
@@ -4405,7 +4405,7 @@ const RealtimeModule = (() => {
 
   function emit(event, data) {
     (listeners[event] || []).forEach(cb => {
-      try { cb(data); } catch (e) { console.warn('MovCat event error:', e); }
+      try { cb(data); } catch (e) { console.warn('Avancem event error:', e); }
     });
   }
 
@@ -4450,7 +4450,7 @@ const RealtimeModule = (() => {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const { LINES, LINE_COLORS, STATIONS, OPERATORS } = window.MOVCAT_DATA;
+    const { LINES, LINE_COLORS, STATIONS, OPERATORS } = window.AVANCEM_DATA;
     let allLines = Object.values(LINES);
     
     // Preserve state across re-renders by storing on the container element
@@ -4562,7 +4562,7 @@ const RealtimeModule = (() => {
           let stId = btn.dataset.station;
           if (!stId && btn.dataset.name) {
             const name = btn.dataset.name;
-            const found = Object.values(window.MOVCAT_DATA.STATIONS).find(
+            const found = Object.values(window.AVANCEM_DATA.STATIONS).find(
               s => s.name === name || s.shortName === name
             );
             stId = found?.id;
@@ -4690,7 +4690,7 @@ const RealtimeModule = (() => {
 
   /* ══════════════════ RENDER: DETALL LÍNIA ══════════════════ */
   function renderLineStatusDetail(lineId) {
-    const { LINES, LINE_COLORS, getSimulatedLineStatus, STATIONS } = window.MOVCAT_DATA;
+    const { LINES, LINE_COLORS, getSimulatedLineStatus, STATIONS } = window.AVANCEM_DATA;
     const line = LINES[lineId];
     if (!line) return;
 
@@ -4798,7 +4798,7 @@ window.RealtimeModule = RealtimeModule;
 ═══════════════════════════════════════════════════════════════════════ */
 
 const I18N = (() => {
-  const LANG_KEY = 'movcat_lang';
+  const LANG_KEY = 'avancem_lang';
 
   const translations = {
     ca: {
@@ -5151,7 +5151,7 @@ const UIModule = (() => {
   function _renderSearchSuggestions() {
     const list = document.getElementById('searchResultsList');
     if (!list) return;
-    const { STATIONS, LINE_COLORS } = window.MOVCAT_DATA;
+    const { STATIONS, LINE_COLORS } = window.AVANCEM_DATA;
 
     // Show favorites + popular stations
     const favStations = StationsModule.getFavoriteStations().slice(0, 4);
@@ -5214,8 +5214,8 @@ const UIModule = (() => {
   }
 
   function _renderSearchItem(st) {
-    const { LINE_COLORS } = window.MOVCAT_DATA;
-    const { busLineColor } = window.MOVCAT_BUS || {};
+    const { LINE_COLORS } = window.AVANCEM_DATA;
+    const { busLineColor } = window.AVANCEM_BUS || {};
     const isBus = st.kind === 'bus';
     const isFav = !isBus && StationsModule.isFavorite(st.id);
     const linesBadges = (st.lines || []).slice(0, 4).map(l =>
@@ -5263,7 +5263,7 @@ const UIModule = (() => {
           return;
         }
 
-        const st = window.MOVCAT_DATA.STATIONS[stId];
+        const st = window.AVANCEM_DATA.STATIONS[stId];
         if (!st) return;
 
         if (activeSearchField === 'general') {
@@ -5316,7 +5316,7 @@ const UIModule = (() => {
   }
 
   function _updateHeroStats() {
-    const { LINES, STATIONS } = window.MOVCAT_DATA;
+    const { LINES, STATIONS } = window.AVANCEM_DATA;
     const lineCount   = Object.keys(LINES).length;
     const stCount     = Object.keys(STATIONS).length;
     const alerts      = RealtimeModule.getActiveAlerts();
@@ -5355,7 +5355,7 @@ const UIModule = (() => {
   }
 
   function renderQuickDepartures() {
-    const { STATIONS, LINE_COLORS } = window.MOVCAT_DATA;
+    const { STATIONS, LINE_COLORS } = window.AVANCEM_DATA;
     const container = document.getElementById('quickDeparturesContainer');
     if (!container) return;
 
@@ -5462,7 +5462,7 @@ const UIModule = (() => {
     const clearBtn = document.getElementById('clearHistoryBtn');
     if (clearBtn) {
       clearBtn.onclick = () => {
-        try { localStorage.removeItem('movcat_route_history'); } catch (_) {}
+        try { localStorage.removeItem('avancem_route_history'); } catch (_) {}
         section.style.display = 'none';
         showToast('Historial esborrat');
       };
@@ -5556,7 +5556,7 @@ const UIModule = (() => {
         }
         renderRouteResult(result, container);
       } catch (e) {
-        console.error('MovCat: error calculant ruta', e);
+        console.error('Avancem: error calculant ruta', e);
         container.innerHTML = `<div class="route-no-result"><p>Error calculant la ruta. Torna-ho a intentar.</p></div>`;
       }
     }, 400);
@@ -5754,7 +5754,7 @@ const UIModule = (() => {
       return;
     }
 
-    const { LINE_COLORS } = window.MOVCAT_DATA;
+    const { LINE_COLORS } = window.AVANCEM_DATA;
     container.innerHTML = favStations.map(st => `
       <button class="fav-station-card" data-station="${st.id}" type="button">
         <div class="fsc-info">
@@ -5801,7 +5801,7 @@ const UIModule = (() => {
       sidebar.innerHTML = '<p class="sidebar-empty">Sense favorits</p>';
       return;
     }
-    const { LINE_COLORS } = window.MOVCAT_DATA;
+    const { LINE_COLORS } = window.AVANCEM_DATA;
     sidebar.innerHTML = favs.map(st => `
       <button class="sidebar-fav-item" data-station="${st.id}" type="button">
         <div class="sfi-dot-row">
@@ -5831,7 +5831,7 @@ const UIModule = (() => {
 
   /* ══════════════════ TEMA ══════════════════ */
   function initTheme() {
-    const saved = localStorage.getItem('movcat_theme');
+    const saved = localStorage.getItem('avancem_theme');
     const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
     const theme = saved || (prefersDark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', theme);
@@ -5841,7 +5841,7 @@ const UIModule = (() => {
     const current = document.documentElement.getAttribute('data-theme') || 'dark';
     const next    = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    try { localStorage.setItem('movcat_theme', next); } catch (_) {}
+    try { localStorage.setItem('avancem_theme', next); } catch (_) {}
     showToast(next === 'dark' ? I18N.t('theme_dark') : I18N.t('theme_light'));
   }
 
@@ -5992,10 +5992,10 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── Seqüència d'inicialització ── */
 
   /* Verificar mòduls */
-  const required = ['MOVCAT_DATA', 'StationsModule', 'RealtimeModule', 'I18N', 'UIModule'];
+  const required = ['AVANCEM_DATA', 'StationsModule', 'RealtimeModule', 'I18N', 'UIModule'];
   const missing  = required.filter(m => !window[m]);
   if (missing.length) {
-    console.error('MOVCAT: Mòduls no carregats:', missing);
+    console.error('AVANCEM: Mòduls no carregats:', missing);
     setSplashProgress(100, 'Error de càrrega. Recarrega la pàgina.');
     return;
   }
@@ -6004,7 +6004,7 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     UIModule.init();
   } catch (err) {
-    console.error('MOVCAT: Error inicialitzant UI:', err);
+    console.error('AVANCEM: Error inicialitzant UI:', err);
     return;
   }
 
@@ -6015,5 +6015,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  console.log('MOVCAT v3.0 — Xarxa ferroviària de Catalunya inicialitzada.');
+  console.log('AVANCEM v3.0 — Xarxa ferroviària de Catalunya inicialitzada.');
 });

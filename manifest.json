@@ -1,6 +1,6 @@
 {
-  "name": "MovCat – Transport ferroviari de Catalunya",
-  "short_name": "MovCat",
+  "name": "Avancem – Transport ferroviari de Catalunya",
+  "short_name": "Avancem",
   "description": "Consulta horaris, planifica rutes i segueix l'estat de les línies de Rodalies i FGC.",
   "start_url": "/",
   "display": "standalone",
@@ -10,13 +10,13 @@
   "lang": "ca",
   "icons": [
     {
-      "src": "movcat.png",
+      "src": "avancem.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "movcat.png",
+      "src": "avancem.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

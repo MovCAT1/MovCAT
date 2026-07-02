@@ -41,8 +41,8 @@ const TripModule = (() => {
     if (!firstStop) return null;
     const lang = I18N.getLang();
 
-    if (seg.isBus && window.MOVCAT_BUS) {
-      const arrivals = await MOVCAT_BUS.BusRealtimeModule.getStopArrivals(firstStop.id);
+    if (seg.isBus && window.AVANCEM_BUS) {
+      const arrivals = await AVANCEM_BUS.BusRealtimeModule.getStopArrivals(firstStop.id);
       const forLine = arrivals.find(a => a.lineId === seg.lineId);
       if (!forLine) return null;
       return {

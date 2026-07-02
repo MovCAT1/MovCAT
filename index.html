@@ -8,19 +8,19 @@
   <meta name="theme-color" content="#0d0d0f" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="MovCat" />
+  <meta name="apple-mobile-web-app-title" content="Avancem" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="application-name" content="MovCat" />
+  <meta name="application-name" content="Avancem" />
   <meta name="description" content="La teva app de transport ferroviari de Catalunya. Consulta horaris, estat de línies i planifica rutes." />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="MovCat — Transport ferroviari de Catalunya" />
+  <meta property="og:title" content="Avancem — Transport ferroviari de Catalunya" />
   <meta property="og:description" content="Consulta horaris, planifica rutes i segueix l'estat de les línies de Rodalies i FGC en temps real." />
   <meta property="og:type" content="website" />
 
   <!-- Apple Splash / Icons -->
-  <link rel="apple-touch-icon" href="movcat.png" />
-  <link rel="icon" type="image/png" href="movcat.png" />
+  <link rel="apple-touch-icon" href="avancem.png" />
+  <link rel="icon" type="image/png" href="avancem.png" />
   <link rel="manifest" href="manifest.json" />
 
   <!-- Fonts -->
@@ -32,9 +32,14 @@
   <link rel="stylesheet" href="tmb/tickets.css" />
   <link rel="stylesheet" href="tmb/tmb-hub.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  <title>MovCat</title>
+  <title>Avancem</title>
 </head>
 <body>
+
+<!-- ═══ SPLASH SCREEN ═══ -->
+<div class="app-splash" id="appSplash" aria-hidden="true">
+  <img class="app-splash-logo" src="avancem-logo.png" alt="Avancem" width="300" height="230" />
+</div>
 
 <div class="app-shell" id="appShell">
 
@@ -376,6 +381,31 @@
 <script src="tmb/tmb-hub.js"></script>
 <script src="trip-mode.js"></script>
 <script src="notify.js"></script>
+
+<script>
+  // Amaga la pantalla de càrrega (splash) un cop l'app ha arrencat.
+  (function () {
+    var MIN_VISIBLE_MS = 900;
+    var shownAt = Date.now();
+    function hideSplash() {
+      var splash = document.getElementById('appSplash');
+      if (!splash) return;
+      var elapsed = Date.now() - shownAt;
+      var wait = Math.max(0, MIN_VISIBLE_MS - elapsed);
+      setTimeout(function () {
+        splash.classList.add('app-splash--hide');
+        splash.addEventListener('transitionend', function () {
+          splash.remove();
+        }, { once: true });
+      }, wait);
+    }
+    if (document.readyState === 'complete') {
+      hideSplash();
+    } else {
+      window.addEventListener('load', hideSplash);
+    }
+  })();
+</script>
 
 </body>
 </html>
